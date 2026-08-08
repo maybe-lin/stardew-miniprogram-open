@@ -84,12 +84,6 @@ npm run dev:login     # 检查登录状态
 node scripts/check-npc-data.js
 ```
 
-miniprogram-ci 上传需密钥（见 `scripts/ci.js`，密钥已 gitignore）：
-
-```bash
-npm run ci:preview
-npm run ci:upload -- 1.0.x "备注"
-```
 
 ## 使用提示
 
