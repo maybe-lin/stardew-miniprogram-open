@@ -1,0 +1,66 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/codex/codex",
+    "pages/toolbox/toolbox",
+    "pages/item/item",
+    "pages/list/list",
+    "pages/newbie/newbie",
+    "pages/bundles/bundles",
+    "pages/settings/settings",
+    "pages/achievements/achievements",
+    "pages/museum/museum",
+    "pages/npcs/npcs",
+    "pages/npc-detail/npc-detail",
+    "pages/buildings/buildings",
+    "pages/drop-farm/drop-farm",
+    "pages/special-orders/special-orders",
+    "pages/webview/webview",
+    "pages/index/index"
+  ],
+  "subPackages": [
+    {
+      "root": "packages/map",
+      "name": "residentMap",
+      "pages": [
+        "pages/map/map"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTitleText": "行之小助手",
+    "navigationBarBackgroundColor": "#F5E0C0",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5E0C0",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8B7355",
+    "selectedColor": "#C26C1C",
+    "backgroundColor": "#FFF8E7",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "images/tab/home.png",
+        "selectedIconPath": "images/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/codex/codex",
+        "text": "图鉴",
+        "iconPath": "images/tab/codex.png",
+        "selectedIconPath": "images/tab/codex-active.png"
+      },
+      {
+        "pagePath": "pages/toolbox/toolbox",
+        "text": "工具箱",
+        "iconPath": "images/tab/toolbox.png",
+        "selectedIconPath": "images/tab/toolbox-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

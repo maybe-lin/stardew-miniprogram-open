@@ -1,0 +1,163 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="card hero-card">
+    <view class="hero-icon">📅</view>
+    <view class="hero-copy">
+      <view class="hero-title">当前游戏进度</view>
+      <view class="hero-val">{{progressText}}</view>
+      <view class="hero-tip">首页推荐、生日和当季收益会同步更新</view>
+    </view>
+  </view>
+
+  <view class="card progress-editor">
+    <view class="editor-head">
+      <view>
+        <view class="card-h">基础进度</view>
+        <view class="editor-sub">选择后立即保存到本机</view>
+      </view>
+      <view class="saved-badge">自动保存</view>
+    </view>
+
+    <view class="field-title">季节</view>
+    <view class="season-row-fixed">
+      <view
+        class="season-chip season-{{item.key}} {{progress.season === item.key ? 'on' : ''}}"
+        wx:for="{{seasons}}"
+        wx:key="key"
+        data-season="{{item.key}}"
+        bindtap="setSeason"
+      >
+        <view class="season-emoji">{{item.emoji}}</view>
+        <view class="season-name">{{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="editor-divider"></view>
+    <view class="slider-block">
+      <view class="slider-head">
+        <text class="field-title">年份</text>
+        <text class="value-pill">第 {{progress.year}} 年</text>
+      </view>
+      <slider min="1" max="10" step="1" value="{{progress.year}}" activeColor="#E8913A" backgroundColor="#E8DDC7" block-size="20" bindchange="setYear" />
+    </view>
+
+    <view class="slider-block">
+      <view class="slider-head">
+        <text class="field-title">日期</text>
+        <text class="value-pill">第 {{progress.day}} / 28 天</text>
+      </view>
+      <slider min="1" max="28" step="1" value="{{progress.day}}" activeColor="#E8913A" backgroundColor="#E8DDC7" block-size="20" bindchange="setDay" />
+    </view>
+
+    <view class="editor-divider"></view>
+    <view class="field-title">天气筛选偏好</view>
+    <view class="weather-row">
+      <view class="weather-chip {{progress.weatherPref === 'any' ? 'on' : ''}}" data-w="any" bindtap="setWeather">🌤 不限</view>
+      <view class="weather-chip {{progress.weatherPref === 'sunny' ? 'on' : ''}}" data-w="sunny" bindtap="setWeather">☀️ 晴天</view>
+      <view class="weather-chip {{progress.weatherPref === 'rain' ? 'on' : ''}}" data-w="rain" bindtap="setWeather">🌧 雨天</view>
+    </view>
+    <view class="weather-note">雨天偏好会将鲶鱼、鳗鱼等限定内容排得更靠前</view>
+  </view>
+
+  <!-- 技能与职业 -->
+  <view class="section-title">人物技能与职业</view>
+  <view class="card skill-intro">
+    <view class="note">
+      5 级二选一、10 级再二选一。职业会改变部分物品<text class="text-strong">卖出价格</text>（如渔夫/垂钓者鱼价、农耕人作物、工匠酒类、铁匠金属锭、宝石专家宝石等）。在物品详情「职业售价」可看到加成后价格。
+    </view>
+  </view>
+
+  <view class="card skill-card" wx:for="{{skillCards}}" wx:key="key">
+    <view class="skill-head" data-key="{{item.key}}" bindtap="toggleSkill">
+      <text class="skill-emoji">{{item.emoji}}</text>
+      <view class="skill-titles">
+        <view class="skill-name">{{item.name}} · Lv.{{item.level}}</view>
+        <view class="skill-path" wx:if="{{item.prof5Name}}">
+          {{item.prof5Name}}<text wx:if="{{item.prof10Name}}"> → {{item.prof10Name}}</text>
+        </view>
+        <view class="skill-path muted" wx:else>未选职业</view>
+      </view>
+      <text class="skill-arrow">{{item.open ? '▾' : '›'}}</text>
+    </view>
+
+    <view class="skill-body" wx:if="{{item.open}}">
+      <view class="note">{{item.how}}</view>
+      <view class="level-row">
+        <text class="field-l">技能等级 0–10</text>
+        <slider
+          min="0"
+          max="10"
+          step="1"
+          value="{{item.level}}"
+          show-value
+          activeColor="#E8913A"
+          data-key="{{item.key}}"
+          bindchange="setSkillLevel"
+        />
+      </view>
+
+      <view class="sub-h">5 级职业 {{item.canPick5 ? '' : '（需 ≥5 级）'}}</view>
+      <view class="prof-row">
+        <view
+          class="prof-chip {{p.on ? 'on' : ''}} {{item.canPick5 ? '' : 'disabled'}}"
+          wx:for="{{item.l5List}}"
+          wx:for-item="p"
+          wx:key="id"
+          data-skill="{{item.key}}"
+          data-id="{{p.id}}"
+          bindtap="pickProf5"
+        >
+          <view class="prof-name">{{p.name}}</view>
+          <view class="prof-desc">{{p.desc}}</view>
+        </view>
+      </view>
+
+      <view class="sub-h">10 级职业 {{item.canPick10 ? '' : '（需 ≥10 级且已选 5 级）'}}</view>
+      <view class="prof-row">
+        <view
+          class="prof-chip {{p.on ? 'on' : ''}} {{item.canPick10 ? '' : 'disabled'}}"
+          wx:for="{{item.l10List}}"
+          wx:for-item="p"
+          wx:key="id"
+          data-skill="{{item.key}}"
+          data-id="{{p.id}}"
+          bindtap="pickProf10"
+        >
+          <view class="prof-name">{{p.name}}</view>
+          <view class="prof-desc">{{p.desc}}</view>
+        </view>
+      </view>
+
+      <view class="sell-box" wx:if="{{item.sellNotes.length}}">
+        <view class="sell-h">💰 售价相关</view>
+        <view class="sell-line" wx:for="{{item.sellNotes}}" wx:for-item="sn" wx:key="*this">· {{sn}}</view>
+      </view>
+
+      <view class="rec-box" wx:if="{{item.recommends.length}}">
+        <view class="sell-h">推荐路线</view>
+        <view class="sell-line" wx:for="{{item.recommends}}" wx:for-item="r" wx:key="name">· {{r.name}}：{{r.path}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card tip">
+    <view class="card-h">说明</view>
+    <view class="note">
+      进度与技能保存在本机，不会读档。下水道不确定雕像可花 10,000g 改职业（游戏内）。技能精通（全 10 级后）奖励见游戏内精通山洞，小程序暂不模拟精通点。
+    </view>
+  </view>
+
+  <view class="card disclaimer-card">
+    <view class="card-h">数据来源与声明（维基）</view>
+    <view class="note" wx:for="{{disclaimerLines}}" wx:key="*this">{{item}}</view>
+    <view class="wiki-link" bindtap="copyWiki">📖 复制星露谷中文维基链接</view>
+    <view class="note muted">{{disclaimerFooter}}</view>
+  </view>
+</view>

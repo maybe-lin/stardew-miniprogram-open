@@ -1,0 +1,104 @@
+.filter-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg, #F5E0C0);
+  padding: 16rpx 0 12rpx;
+  box-shadow: none;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.progress-mini {
+  margin: 0 28rpx 12rpx;
+  font-size: 22rpx;
+  color: var(--primary-dark);
+  font-weight: 600;
+  background: rgba(255,248,231,0.9);
+  border: 1rpx solid var(--border);
+  border-radius: 12rpx;
+  padding: 10rpx 16rpx;
+}
+
+.item-row.out-season {
+  opacity: 0.45;
+  filter: grayscale(0.35);
+}
+
+.badge-in, .badge-out, .badge-rain {
+  display: inline-block;
+  font-size: 18rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  margin-left: 8rpx;
+  font-weight: 700;
+  vertical-align: middle;
+}
+.badge-in { background: rgba(92,184,92,0.2); color: #3d8b3d; }
+.badge-out { background: rgba(127,140,141,0.2); color: #7f8c8d; }
+.badge-rain { background: rgba(91,192,222,0.25); color: #2a7a96; }
+
+.filter-scroll {
+  width: 100%;
+  white-space: nowrap;
+  height: auto;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+}
+
+.filters {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12rpx;
+  padding-bottom: 2rpx;
+}
+
+.f-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-sub);
+  flex-shrink: 0;
+  line-height: 1.2;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.f-chip.on {
+  background: var(--primary);
+  border-color: var(--primary-dark);
+  color: #fff;
+}
+
+.list-scroll {
+  /* 用 flex 填满剩余高度更稳；vh+rpx 混算在部分机型会算错 */
+  height: calc(100vh - 280rpx);
+  min-height: 40vh;
+}
+
+.list-wrap {
+  padding: 8rpx 28rpx 40rpx;
+}
+
+.hint-long {
+  padding: 4rpx 28rpx 8rpx;
+  font-size: 20rpx;
+  color: var(--text-muted);
+}
+
+.count {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-bottom: 12rpx;
+}
+
+.tags {
+  margin-bottom: 4rpx;
+}

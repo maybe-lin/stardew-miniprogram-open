@@ -1,0 +1,202 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <!-- 有数据 -->
+  <view class="page-main" wx:if="{{npc}}">
+    <!-- A. 顶部头图 -->
+    <view class="hero" style="background: linear-gradient(145deg, {{npc.color}} 0%, #314c59 100%);">
+      <view class="hero-orb orb-one"></view>
+      <view class="hero-orb orb-two"></view>
+      <view class="hero-content">
+        <view class="hero-kicker">STARDEW RESIDENT · 居民档案</view>
+        <view class="portrait-frame">
+          <image class="hero-av" src="{{npc.avatar}}" mode="aspectFit" wx:if="{{npc.avatar}}" />
+          <view class="hero-av emoji" wx:else>{{npc.emoji}}</view>
+        </view>
+        <view class="hero-name">{{npc.name}}</view>
+        <view class="hero-en" wx:if="{{npc.en}}">{{npc.en}}</view>
+        <view class="hero-tags">
+          <text class="htag">🎂 {{npc.birthday.text}}</text>
+          <text class="htag home">📍 {{npc.home}}</text>
+          <text class="htag love" wx:if="{{npc.groupLabel}}">{{npc.groupLabel}}</text>
+          <text class="htag love" wx:elif="{{npc.marriageable}}">💕 可结婚</text>
+        </view>
+        <view class="birthday-status">{{birthdayStatus}}</view>
+      </view>
+    </view>
+
+    <!-- B. 状态仪表盘：紧贴头图并上浮叠在头图底部，中间勿插其它卡片 -->
+    <view class="dash card">
+      <view class="dash-left">
+        <view class="heart-big">❤️ {{hearts}} / {{maxHearts}}</view>
+        <view class="relation">{{relationText}}</view>
+        <view class="heart-ctrl">
+          <view class="hbtn" bindtap="decHeart">−</view>
+          <view class="hbtn" bindtap="incHeart">＋</view>
+        </view>
+        <view class="heart-hint">本地记录好感，用于判断事件可否触发</view>
+      </view>
+      <view class="dash-right">
+        <view class="today-label">常驻位置提示</view>
+        <view class="today-place">常在【{{npc.today.place}}】</view>
+        <view class="today-time">{{npc.today.weather}} · {{npc.today.time}}</view>
+      </view>
+    </view>
+
+    <!-- 简介放在仪表盘下方，避免与负 margin 的 dash 叠字 -->
+    <view class="card intro-card" wx:if="{{npc.intro || npc.tips}}">
+      <view class="intro-text" wx:if="{{npc.intro}}">{{npc.intro}}</view>
+      <view class="intro-tips" wx:if="{{npc.tips}}">💡 {{npc.tips}}</view>
+    </view>
+
+    <!-- C. Tab -->
+    <view class="tabs">
+      <view class="tab {{tab === 'gift' ? 'on' : ''}}" data-tab="gift" bindtap="switchTab">🎁 送礼</view>
+      <view class="tab {{tab === 'event' ? 'on' : ''}}" data-tab="event" bindtap="switchTab">🎬 事件</view>
+      <view class="tab {{tab === 'schedule' ? 'on' : ''}}" data-tab="schedule" bindtap="switchTab">📅 日程</view>
+    </view>
+
+    <!-- 送礼 -->
+    <view class="panel" wx:if="{{tab === 'gift'}}">
+      <view class="card data-note" wx:if="{{npc.isFallback}}">
+        {{npc.giftComplete ? '送礼清单已补齐；详细事件与日程会继续补充。' : '当前为基础档案，详细喜好、事件与日程会继续补充。'}}
+      </view>
+      <view class="card universal-card" wx:if="{{npc.universalLoves}}">
+        <view class="universal-title">⭐ 全村通用最爱</view>
+        <view class="universal-text">{{npc.universalLoves}}</view>
+        <view class="universal-note">{{npc.universalNote}}</view>
+      </view>
+      <view class="card">
+        <view class="sec-title gift-title">
+          <text>最爱礼物</text>
+          <text class="gift-score">+80 · 生日 ×8</text>
+        </view>
+        <view class="love-row" wx:if="{{npc.loves.length}}">
+          <view
+            class="love-item {{item.itemId ? 'linked' : ''}}"
+            wx:for="{{npc.loves}}"
+            wx:key="key"
+            data-id="{{item.itemId}}"
+            bindtap="goGift"
+          >
+            <view class="love-icon">
+              <image wx:if="{{item.icon}}" class="love-icon-img" src="{{item.icon}}" mode="aspectFit" />
+              <text wx:else>{{item.emoji}}</text>
+            </view>
+            <view class="love-name">{{item.name}}</view>
+            <view class="love-src">{{item.source}}</view>
+            <view class="love-link" wx:if="{{item.itemId}}">查看物品 ›</view>
+          </view>
+        </view>
+        <view class="empty-inline" wx:else>暂无最爱礼物数据</view>
+      </view>
+
+      <view class="card acc">
+        <view class="acc-h" bindtap="toggleLikes">
+          <text>喜欢 <text class="acc-score">+45</text></text>
+          <text class="acc-arrow">{{showLikes ? '▾' : '▸'}}</text>
+        </view>
+        <view wx:if="{{showLikes}}">
+          <view class="like-gift-row" wx:if="{{npc.likeGifts.length}}">
+            <view
+              class="like-gift-item {{item.itemId ? 'linked' : ''}}"
+              wx:for="{{npc.likeGifts}}"
+              wx:key="key"
+              data-id="{{item.itemId}}"
+              bindtap="goGift"
+            >
+              <view class="like-gift-icon">
+                <image wx:if="{{item.icon}}" class="like-gift-img" src="{{item.icon}}" mode="aspectFit" />
+                <text wx:else>{{item.emoji}}</text>
+              </view>
+              <text class="like-gift-name">{{item.name}}</text>
+            </view>
+          </view>
+          <view class="acc-b likes-note">{{npc.likes}}</view>
+        </view>
+      </view>
+
+      <view class="card neutral-card">
+        <view class="acc-h">
+          <text>一般 <text class="acc-score neutral">+20</text></text>
+        </view>
+        <view class="acc-b always">{{npc.neutral}}</view>
+      </view>
+
+      <view class="card acc" bindtap="toggleHates">
+        <view class="acc-h">
+          <text>讨厌</text>
+          <text class="acc-arrow">{{showHates ? '▾' : '▸'}}</text>
+        </view>
+        <view class="acc-b" wx:if="{{showHates}}">{{npc.hates}}</view>
+      </view>
+    </view>
+
+    <!-- 事件 -->
+    <view class="panel" wx:if="{{tab === 'event'}}">
+      <view class="card tip-card">
+        <view class="tip-text">用上方 ＋/− 记录当前好感心数；达到需求后显示「可触发」。共 {{eventList.length}} 个事件（过场 / 来信 / 解锁）。</view>
+      </view>
+      <block wx:if="{{eventList.length}}">
+        <view class="card ev" wx:for="{{eventList}}" wx:key="key">
+          <view class="ev-head">
+            <view class="ev-name">
+              <text class="ev-type type-{{item.type}}">{{item.typeLabel}}</text>
+              {{item.heart}}心 · {{item.name}}
+            </view>
+            <view class="ev-badge {{item.unlocked ? 'ready' : 'lock'}}">
+              {{item.unlocked ? '可触发' : '未解锁'}}
+            </view>
+          </view>
+          <view class="ev-tags">
+            <text class="cap">❤️ {{item.heart}}心</text>
+            <text class="cap">⏰ {{item.time}}</text>
+            <text class="cap">📍 {{item.place}}</text>
+            <text class="cap">🌤️ {{item.weather}}</text>
+          </view>
+          <view class="ev-desc">{{item.desc}}</view>
+        </view>
+      </block>
+      <view class="card" wx:else>
+        <view class="empty-inline">暂无爱心事件数据</view>
+      </view>
+    </view>
+
+    <!-- 日程 -->
+    <view class="panel" wx:if="{{tab === 'schedule'}}">
+      <view class="card tip-card">
+        <view class="tip-text">以下为常规位置参考；季节、天气、节日和剧情进度都可能改变当天日程。</view>
+      </view>
+      <view class="card" wx:if="{{npc.schedule.length}}">
+        <view class="timeline">
+          <view class="tl-item" wx:for="{{npc.schedule}}" wx:key="key">
+            <view class="tl-left">
+              <view class="tl-dot"></view>
+              <view class="tl-line" wx:if="{{index < npc.schedule.length - 1}}"></view>
+            </view>
+            <view class="tl-right">
+              <view class="tl-time">{{item.time}}</view>
+              <view class="tl-act">{{item.act}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="card" wx:else>
+        <view class="empty-inline">暂无日程数据</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未找到 -->
+  <view class="page-main empty" wx:elif="{{loaded}}">
+    <view class="empty-tip">未找到该村民档案</view>
+    <view class="empty-sub">请返回列表重新选择</view>
+  </view>
+</view>

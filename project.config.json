@@ -1,0 +1,91 @@
+{
+  "setting": {
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "uglifyFileName": false,
+    "enhance": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useCompilerPlugins": false,
+    "minifyWXML": true,
+    "urlCheck": false,
+    "condition": true
+  },
+  "compileType": "miniprogram",
+  "simulatorPluginLibVersion": {
+    "wxext14566970e7e9f62": "2.27.3"
+  },
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "folder",
+        "value": ".venv-img"
+      },
+      {
+        "type": "folder",
+        "value": "_dev_unused"
+      },
+      {
+        "type": "folder",
+        "value": ".git"
+      },
+      {
+        "type": "folder",
+        "value": ".grok"
+      },
+      {
+        "type": "folder",
+        "value": "scripts"
+      },
+      {
+        "type": "file",
+        "value": "package-lock.json"
+      },
+      {
+        "type": "file",
+        "value": "package.json"
+      },
+      {
+        "type": "suffix",
+        "value": ".md"
+      },
+      {
+        "type": "suffix",
+        "value": ".orig.jpg"
+      },
+      {
+        "type": "file",
+        "value": "images/app-bg.png"
+      },
+      {
+        "type": "file",
+        "value": "images/map-residence.png"
+      },
+      {
+        "type": "file",
+        "value": "data/wiki_pages.json"
+      },
+      {
+        "type": "file",
+        "value": "preview-qrcode.jpg"
+      },
+      {
+        "type": "file",
+        "value": "preview-info.json"
+      }
+    ],
+    "include": []
+  },
+  "appid": "wx9e53905e3688c7b6",
+  "editorSetting": {},
+  "projectArchitecture": "multiPlatform"
+}

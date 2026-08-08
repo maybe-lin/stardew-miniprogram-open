@@ -1,0 +1,315 @@
+.page-main {
+  min-height: 100vh;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+}
+
+.header-pad {
+  padding: 12rpx 20rpx 0;
+}
+
+.section-label {
+  font-size: 24rpx;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8rpx;
+  text-shadow: 0 1rpx 4rpx rgba(255, 255, 255, 0.5);
+}
+
+/* 4 列：padding 分列，避免安卓 gap/calc 错位成 3 列 */
+.cat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 10rpx;
+}
+
+.cat-card {
+  width: 25%;
+  box-sizing: border-box;
+  padding: 5rpx;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.cat-card-inner {
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  border-radius: 16rpx;
+  /* 紧贴内容，不强制 min-height，减少框内底部留白 */
+  padding: 10rpx 4rpx 8rpx;
+  text-align: center;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-card.on .cat-card-inner {
+  border-color: var(--primary);
+  background: rgba(232, 145, 58, 0.14);
+  box-shadow: 0 4rpx 14rpx rgba(232, 145, 58, 0.2);
+}
+
+.cat-card:active .cat-card-inner {
+  transform: scale(0.96);
+  border-color: var(--primary);
+}
+
+.cat-icon-wrap {
+  width: 44rpx;
+  height: 44rpx;
+  margin: 0 auto 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cat-icon {
+  width: 40rpx;
+  height: 40rpx;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.cat-emoji {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.cat-name {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  line-height: 1.2;
+}
+
+.cat-prog {
+  font-size: 18rpx;
+  color: var(--text-muted);
+  margin-top: 2rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  line-height: 1.2;
+}
+
+/* 窄屏：再收一点间距，避免框显得空 */
+@media (max-width: 360px) {
+  .cat-card {
+    padding: 4rpx;
+  }
+  .cat-card-inner {
+    padding: 8rpx 2rpx 6rpx;
+    border-radius: 14rpx;
+  }
+  .cat-icon-wrap {
+    width: 40rpx;
+    height: 40rpx;
+    margin-bottom: 2rpx;
+  }
+  .cat-icon {
+    width: 36rpx;
+    height: 36rpx;
+  }
+  .cat-name {
+    font-size: 20rpx;
+  }
+  .cat-prog {
+    font-size: 16rpx;
+  }
+}
+
+/* 横向筛选条：高度随内容，与 NPC 页一致，避免 chip 被纵向撑高 */
+.filter-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin-bottom: 8rpx;
+  height: auto;
+}
+
+.filters {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10rpx;
+  padding: 0 2rpx 2rpx;
+}
+
+.f-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--text-sub);
+  flex-shrink: 0;
+  line-height: 1.2;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.f-chip.on {
+  background: var(--primary);
+  border-color: var(--primary-dark);
+  color: #fff;
+}
+
+.list-wrap {
+  padding: 12rpx 28rpx 40rpx;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  border-radius: 20rpx;
+  padding: 18rpx 20rpx;
+  margin-bottom: 12rpx;
+  box-shadow: var(--shadow);
+}
+
+.item-row:active {
+  border-color: var(--primary);
+}
+
+.item-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.item-icon-img {
+  width: 56rpx;
+  height: 56rpx;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.item-icon.dim {
+  opacity: 0.45;
+  filter: grayscale(0.4);
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.star {
+  font-size: 22rpx;
+  margin-left: 6rpx;
+}
+
+.badge-must {
+  display: inline-block;
+  font-size: 18rpx;
+  font-weight: 700;
+  color: #fff;
+  background: #e8913a;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  margin-left: 8rpx;
+  vertical-align: middle;
+}
+
+.cook-hint {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin: 4rpx 0 8rpx;
+  padding: 0 4rpx;
+}
+
+.tags {
+  margin: 6rpx 0 4rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rpx;
+}
+
+.item-meta {
+  font-size: 20rpx;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.icon-btns .check {
+  margin-left: 8rpx;
+}
+
+.right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10rpx;
+  flex-shrink: 0;
+}
+
+.item-price {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.check {
+  font-size: 32rpx;
+  padding: 4rpx;
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 60rpx 20rpx;
+  font-size: 26rpx;
+  background: var(--bg-card);
+  border-radius: 16rpx;
+}
+
+.wiki-foot-inline {
+  text-align: center;
+  font-size: 20rpx;
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding: 24rpx 16rpx 40rpx;
+}
+.book-label {
+  color: #7463a7;
+  font-size: 21rpx;
+}

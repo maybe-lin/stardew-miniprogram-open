@@ -1,0 +1,58 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="page-main">
+    <view class="card head">
+      <view class="head-title">🏆 成就列表</view>
+      <view class="head-sub">对照星露谷中文维基 · 点击勾选已完成</view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{percent}}%;"></view>
+      </view>
+      <view class="head-num">已完成 {{done}} / {{total}}（{{percent}}%）</view>
+      <view class="wiki-btn" bindtap="openWiki">📖 打开维基「成就」说明</view>
+    </view>
+
+    <scroll-view scroll-x class="cat-scroll" enable-flex>
+      <view
+        class="cat-chip {{cat === item.key ? 'on' : ''}}"
+        wx:for="{{cats}}"
+        wx:key="key"
+        data-cat="{{item.key}}"
+        bindtap="setCat"
+      >
+        <text>{{item.emoji}} {{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="list">
+      <view
+        class="card ach {{item.done ? 'done' : ''}}"
+        wx:for="{{list}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="toggle"
+      >
+        <view class="ach-check">{{item.done ? '✅' : '⬜'}}</view>
+        <view class="ach-emoji">{{item.emoji}}</view>
+        <view class="ach-body">
+          <view class="ach-name">
+            {{item.name}}
+            <text class="hidden-tag" wx:if="{{item.hidden}}">隐藏</text>
+          </view>
+          <view class="ach-desc">{{item.desc}}</view>
+          <view class="ach-reward" wx:if="{{item.reward}}">奖励：{{item.reward}}</view>
+        </view>
+      </view>
+      <view wx:if="{{!list.length}}" class="empty">该分类暂无成就</view>
+    </view>
+
+    <view class="footer">数据来源：星露谷中文维基「成就」· 仅供学习 · 非官方 · 请勿商用</view>
+  </view>
+</view>

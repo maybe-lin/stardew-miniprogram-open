@@ -1,0 +1,173 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <!-- 全局加载态 -->
+  <view class="loading-mask" wx:if="{{loading}}">
+    <view class="loading-box">
+      <view class="loading-dot"></view>
+      <text class="loading-text">{{loadingText}}</text>
+    </view>
+  </view>
+  <!-- 顶栏：不在滚动容器内，下滑也不会消失 -->
+  <view class="search-wrap">
+    <view class="progress-chip" bindtap="goSettings">
+      <text>📅 {{progressText}}</text>
+      <text class="progress-edit">改进度</text>
+    </view>
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="秒查：作物 / 鱼 / NPC / 料理 / 书籍…"
+        placeholder-class="search-ph"
+        value="{{keyword}}"
+        confirm-type="search"
+        bindinput="onInput"
+        bindconfirm="onSearch"
+        focus="{{false}}"
+      />
+      <view wx:if="{{keyword}}" class="search-clear" bindtap="clearSearch">✕</view>
+    </view>
+  </view>
+
+  <!-- 仅下方区域滚动 -->
+  <scroll-view
+    scroll-y
+    class="home-scroll"
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <!-- 搜索结果 -->
+    <view wx:if="{{keyword}}" class="content">
+      <view class="section-title">搜索结果 · {{results.length}}（物品与居民）</view>
+      <view wx:if="{{!results.length}}" class="empty">没有找到「{{keyword}}」相关内容</view>
+      <view
+        class="item-row {{item.outOfSeason ? 'out-season' : ''}}"
+        wx:for="{{results}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        data-type="{{item.resultType}}"
+        data-name="{{item.name}}"
+        bindtap="goSearchResult"
+        bindlongpress="onLongPress"
+      >
+        <view class="item-icon">
+          <image wx:if="{{item.hasIcon}}" class="item-icon-img" src="{{item.icon}}" mode="aspectFit" />
+          <text wx:else>{{item.emoji}}</text>
+        </view>
+        <view class="item-body">
+          <view class="item-name">
+            {{item.name}}
+            <text class="badge-npc" wx:if="{{item.resultType === 'npc'}}">{{item.categoryName}}</text>
+            <text class="badge-in" wx:if="{{item.inSeason && item.seasons.length}}">当季</text>
+            <text class="badge-out" wx:if="{{item.outOfSeason}}">过季</text>
+            <text class="badge-rain" wx:if="{{item.rainOnly}}">雨天</text>
+          </view>
+          <view class="tags">
+            <text
+              class="tag tag-season tag-{{s}}"
+              wx:for="{{item.seasons}}"
+              wx:for-item="s"
+              wx:key="*this"
+            >{{s === 'spring' ? '春' : s === 'summer' ? '夏' : s === 'fall' ? '秋' : '冬'}}</text>
+            <text class="tag tag-muted" wx:if="{{item.resultType !== 'npc'}}">{{item.categoryName}}</text>
+          </view>
+          <view class="item-meta">{{item.sources[0] ? (item.sources[0].label + ' · ' + item.sources[0].detail) : ''}}</view>
+        </view>
+        <view class="item-price" wx:if="{{item.resultType !== 'npc' && item.basePrice}}">{{item.basePrice}}g</view>
+        <view class="item-price" wx:elif="{{item.resultType === 'item' && item.category === 'book'}}">阅读</view>
+        <view class="result-arrow" wx:else>›</view>
+      </view>
+    </view>
+
+    <!-- 默认首页 -->
+    <view wx:else class="content">
+      <view wx:if="{{historyItems.length}}" class="history-block">
+        <view class="section-title">
+          <text>最近查看</text>
+          <text class="link-clear" catchtap="clearHistory">清空</text>
+        </view>
+        <scroll-view scroll-x class="history-scroll" enable-flex>
+          <view class="history-chips">
+            <view
+              class="history-chip"
+              wx:for="{{historyItems}}"
+              wx:key="id"
+              data-id="{{item.id}}"
+              bindtap="goItem"
+            >
+              <image wx:if="{{item.hasIcon}}" class="history-icon-img" src="{{item.icon}}" mode="aspectFit" />
+              <text wx:else class="history-emoji">{{item.emoji}}</text>
+              <text class="history-name">{{item.name}}</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <view wx:for="{{modules}}" wx:for-item="mod" wx:key="key" class="module-block">
+        <view class="module-head">
+          <text class="module-emoji">{{mod.emoji}}</text>
+          <view class="module-titles">
+            <view class="module-title">{{mod.title}}</view>
+            <view class="module-sub">{{mod.subtitle}}</view>
+          </view>
+        </view>
+        <view class="module-grid">
+          <view
+            class="module-item"
+            wx:for="{{mod.items}}"
+            wx:for-item="it"
+            wx:key="key"
+            data-mkey="{{mod.key}}"
+            data-ikey="{{it.key}}"
+            bindtap="onModuleItem"
+          >
+            <view class="module-item-inner">
+              <image wx:if="{{it.icon}}" class="module-item-icon" src="{{it.icon}}" mode="aspectFit" />
+              <view class="module-item-emoji" wx:else>{{it.emoji}}</view>
+              <view class="module-item-title">{{it.title}}</view>
+              <view class="module-item-desc">{{it.desc}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-title">今日提示
+        <text class="section-sub">按 {{progressText}}</text>
+      </view>
+      <view class="daily-list">
+        <view
+          class="daily-card kind-{{item.kind}}"
+          wx:for="{{dailyTips}}"
+          wx:key="id"
+        >
+          <view class="daily-badge">{{item.badge}}</view>
+          <view class="daily-title">
+            <text class="daily-emoji">{{item.emoji}}</text>
+            {{item.title}}
+          </view>
+          <view class="daily-desc">{{item.desc}}</view>
+          <view
+            class="daily-action"
+            wx:if="{{item.actionText}}"
+            data-index="{{index}}"
+            bindtap="onDailyAction"
+          >{{item.actionText}} ›</view>
+        </view>
+      </view>
+
+      <view class="footer-tip">行之小助手 · 基础查询 / 实用工具 / 进阶攻略</view>
+      <view class="wiki-disclaimer" bindtap="showDisclaimer">
+        <view class="wiki-disclaimer-title">数据来源与声明</view>
+        <view class="wiki-disclaimer-text">{{disclaimerFooter}}</view>
+        <view class="wiki-disclaimer-more">点击查看完整说明 · 可复制维基链接</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

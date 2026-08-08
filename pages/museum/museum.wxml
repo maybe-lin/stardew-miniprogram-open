@@ -1,0 +1,110 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="page-main">
+    <!-- 概况 -->
+    <view class="card hero">
+      <view class="hero-title">🏛️ 星露谷博物馆</view>
+      <view class="hero-sub">{{info.summary}}</view>
+      <view class="meta-row">
+        <view class="meta">⏰ {{info.openHours}}</view>
+        <view class="meta">📍 {{info.address}}</view>
+        <view class="meta">👤 馆长 {{info.npc}}</view>
+      </view>
+      <view class="stat-row">
+        <view class="stat">
+          <view class="stat-n">{{info.totalDonate}}</view>
+          <view class="stat-l">可捐赠</view>
+        </view>
+        <view class="stat">
+          <view class="stat-n">{{info.artifactCount}}</view>
+          <view class="stat-l">古物</view>
+        </view>
+        <view class="stat">
+          <view class="stat-n">{{info.mineralCount}}</view>
+          <view class="stat-l">矿物</view>
+        </view>
+      </view>
+      <view class="btn-row">
+        <view class="btn" bindtap="goArtifacts">🏺 古物列表</view>
+        <view class="btn" bindtap="goMinerals">💎 矿物列表</view>
+        <view class="btn ghost" bindtap="copyWiki">📖 复制维基</view>
+      </view>
+    </view>
+
+    <!-- Tabs -->
+    <view class="tabs">
+      <view class="tab {{tab === 'total' ? 'on' : ''}}" data-tab="total" bindtap="switchTab">全部捐赠</view>
+      <view class="tab {{tab === 'mineral' ? 'on' : ''}}" data-tab="mineral" bindtap="switchTab">矿物奖励</view>
+      <view class="tab {{tab === 'artifact' ? 'on' : ''}}" data-tab="artifact" bindtap="switchTab">古物奖励</view>
+    </view>
+
+    <!-- 全部捐赠里程碑 -->
+    <view class="panel" wx:if="{{tab === 'total'}}">
+      <view class="section-tip">共 95 件（42 古物 + 53 矿物）。达到数量找冈瑟领奖。</view>
+      <view class="card reward" wx:for="{{totalRewards}}" wx:key="count">
+        <view class="r-left">
+          <view class="r-count">{{item.count}} 件</view>
+          <view class="r-bar-wrap">
+            <view class="r-bar" style="width: {{item.count / 95 * 100}}%;"></view>
+          </view>
+        </view>
+        <view class="r-right">
+          <text class="r-emoji">{{item.emoji}}</text>
+          <text class="r-name">{{item.reward}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 矿物 -->
+    <view class="panel" wx:if="{{tab === 'mineral'}}">
+      <view class="section-tip">共 53 种矿物可捐赠。按矿物件数领奖。</view>
+      <view class="card reward" wx:for="{{mineralRewards}}" wx:key="count">
+        <view class="r-left">
+          <view class="r-count">{{item.count}} 种矿物</view>
+        </view>
+        <view class="r-right">
+          <text class="r-emoji">{{item.emoji}}</text>
+          <text class="r-name">{{item.reward}}</text>
+        </view>
+      </view>
+      <view class="link-card" bindtap="goMinerals">查看矿物图鉴 ›</view>
+    </view>
+
+    <!-- 古物特定奖励 -->
+    <view class="panel" wx:if="{{tab === 'artifact'}}">
+      <view class="section-tip">共 42 种古物。数量奖励 + 特定古物奖励如下。</view>
+      <view class="card reward tall" wx:for="{{artifactRewards}}" wx:key="id">
+        <view class="r-emoji-big">{{item.emoji}}</view>
+        <view class="r-body">
+          <view class="r-name">{{item.reward}}</view>
+          <view class="r-cond">条件：{{item.condition}}</view>
+        </view>
+      </view>
+      <view class="link-card" bindtap="goArtifacts">查看古物图鉴 ›</view>
+    </view>
+
+    <!-- 成就 -->
+    <view class="card block">
+      <view class="block-title">🏆 相关成就</view>
+      <view class="ach" wx:for="{{achievements}}" wx:key="name">
+        <view class="ach-name">{{item.name}}</view>
+        <view class="ach-desc">{{item.desc}}</view>
+      </view>
+    </view>
+
+    <!-- 提示 -->
+    <view class="card block">
+      <view class="block-title">💡 小提示</view>
+      <view class="tip" wx:for="{{tips}}" wx:key="*this">· {{item}}</view>
+    </view>
+
+    <view class="footer">数据来源：星露谷中文维基「博物馆/古物」· 仅供学习 · 非官方 · 请勿商用</view>
+  </view>
+</view>

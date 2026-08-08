@@ -1,0 +1,265 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <!-- 加载中… -->
+  <view class="loading-mask" wx:if="{{loading}}">
+    <view class="loading-box">
+      <view class="loading-dot"></view>
+      <text class="loading-text">{{loadingText}}</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-x class="tabs-scroll" enable-flex>
+    <view class="tabs">
+      <view class="tab {{tab === 'calendar' ? 'active' : ''}}" data-tab="calendar" bindtap="switchTab">季节日历</view>
+      <view class="tab {{tab === 'plan' ? 'active' : ''}}" data-tab="plan" bindtap="switchTab">种植钓鱼</view>
+      <view class="tab {{tab === 'profit' ? 'active' : ''}}" data-tab="profit" bindtap="switchTab">利润计算</view>
+      <view class="tab {{tab === 'gift' ? 'active' : ''}}" data-tab="gift" bindtap="switchTab">礼物推荐</view>
+      <view class="tab {{tab === 'upgrade' ? 'active' : ''}}" data-tab="upgrade" bindtap="switchTab">工具升级</view>
+    </view>
+  </scroll-view>
+
+  <navigator url="/pages/buildings/buildings" class="building-banner" hover-class="building-banner-hover">
+    <image class="building-banner-icon-img" src="/images/buildings/barn.png" mode="aspectFit" />
+    <view class="building-banner-copy">
+      <view class="building-banner-title">农场建筑速查</view>
+      <view class="building-banner-desc">罗宾商店 · 造价、材料、工期与容量</view>
+    </view>
+    <view class="building-banner-arrow">›</view>
+  </navigator>
+
+  <!-- 季节日历：生日 + 节日攻略 + 倒计时 -->
+  <view class="panel" wx:if="{{tab === 'calendar'}}">
+    <view class="card season-pick">
+      <view class="card-h">选择季节 · {{progressText}}</view>
+      <view class="season-row">
+        <view class="s-btn {{season === 'spring' ? 'on spring' : ''}}" data-s="spring" bindtap="setSeason">春</view>
+        <view class="s-btn {{season === 'summer' ? 'on summer' : ''}}" data-s="summer" bindtap="setSeason">夏</view>
+        <view class="s-btn {{season === 'fall' ? 'on fall' : ''}}" data-s="fall" bindtap="setSeason">秋</view>
+        <view class="s-btn {{season === 'winter' ? 'on winter' : ''}}" data-s="winter" bindtap="setSeason">冬</view>
+      </view>
+    </view>
+
+    <view class="section-title">{{seasonName}}节日攻略</view>
+    <view class="card fest" wx:for="{{festivals}}" wx:key="id">
+      <view class="fest-top">
+        <text class="fest-emoji">{{item.emoji}}</text>
+        <view class="fest-body">
+          <view class="fest-name">{{item.day}}日 · {{item.name}}</view>
+          <view class="fest-cd">{{item.countdown}}</view>
+        </view>
+      </view>
+      <view class="fest-line"><text class="k">准备</text>{{item.prep}}</view>
+      <view class="fest-line"><text class="k">流程</text>{{item.flow}}</view>
+      <view class="fest-line"><text class="k">奖励</text>{{item.reward}}</view>
+      <view class="fest-tip">💡 {{item.tip}}</view>
+    </view>
+
+    <view class="section-title">{{seasonName}}生日 · 最佳礼物</view>
+    <view class="card bday" wx:for="{{birthdays}}" wx:key="day" data-id="{{item.villagerId}}" bindtap="goNpc">
+      <view class="bday-avatar-wrap">
+        <image wx:if="{{item.avatar}}" class="bday-avatar" src="{{item.avatar}}" mode="aspectFill" />
+        <view wx:else class="bday-emoji">{{item.emoji}}</view>
+      </view>
+      <view class="bday-day">{{item.day}}日</view>
+      <view class="bday-body">
+        <view class="bday-name">{{item.name}}</view>
+        <view class="bday-gift">最佳礼物：{{item.gift}}</view>
+      </view>
+    </view>
+
+    <view class="section-title">地图</view>
+    <navigator url="/packages/map/pages/map/map" class="card map-entry" hover-class="map-entry-hover">
+      <image class="map-thumb" src="/images/map-residence.jpg" mode="aspectFill" />
+      <view class="map-entry-body">
+        <view class="map-entry-title">星露谷小镇地图</view>
+        <view class="map-entry-desc">居民住处 / 区域设施 / 解锁条件</view>
+      </view>
+      <view class="map-entry-arrow">›</view>
+    </navigator>
+  </view>
+
+  <!-- 种植 / 钓鱼规划 -->
+  <view class="panel" wx:if="{{tab === 'plan'}}">
+    <view class="card season-pick">
+      <view class="card-h">规划季节 · 当前 {{progressText}}</view>
+      <view class="season-row">
+        <view class="s-btn {{season === 'spring' ? 'on spring' : ''}}" data-s="spring" bindtap="setSeason">春</view>
+        <view class="s-btn {{season === 'summer' ? 'on summer' : ''}}" data-s="summer" bindtap="setSeason">夏</view>
+        <view class="s-btn {{season === 'fall' ? 'on fall' : ''}}" data-s="fall" bindtap="setSeason">秋</view>
+        <view class="s-btn {{season === 'winter' ? 'on winter' : ''}}" data-s="winter" bindtap="setSeason">冬</view>
+      </view>
+    </view>
+
+    <!-- 操作提示：收益对比建议 -->
+    <view class="card insight-card" wx:if="{{planInsight}}">
+      <view class="insight-label">💡 操作建议</view>
+      <view class="insight-text">{{planInsight}}</view>
+      <view class="insight-detail" wx:if="{{planInsightDetail}}">{{planInsightDetail}}</view>
+    </view>
+
+    <view class="section-title">🌱 {{seasonName}}种植建议</view>
+    <view class="card plan-card" wx:for="{{planPlant}}" wx:key="name">
+      <view class="plan-name">{{item.name}}</view>
+      <view class="plan-reason">{{item.reason}}</view>
+      <view class="plan-tip">{{item.tip}}</view>
+    </view>
+
+    <view class="section-title">🎣 {{seasonName}}钓鱼建议</view>
+    <view class="card plan-card" wx:for="{{planFish}}" wx:key="name">
+      <view class="plan-name">{{item.name}}</view>
+      <view class="plan-reason">{{item.reason}}</view>
+      <view class="plan-tip">{{item.tip}}</view>
+    </view>
+
+    <view class="card tip">
+      提示：设置首页「游戏进度」后，今日提示与倒计时会按你的季节/日期更新。天气与土地格子需在游戏内查看，本工具给出策略级推荐。
+    </view>
+  </view>
+
+  <!-- 利润计算 + 对比 + 历史 -->
+  <view class="panel" wx:if="{{tab === 'profit'}}">
+    <view class="card">
+      <view class="card-h">作物利润计算</view>
+      <picker mode="selector" range="{{cropNames}}" value="{{cropIndex}}" bindchange="onCropChange">
+        <view class="picker-val">作物：{{crops[cropIndex].name}} ▾</view>
+      </picker>
+      <picker mode="selector" range="{{fertNames}}" value="{{fertIndex}}" bindchange="onFertChange">
+        <view class="picker-val">肥料：{{fertList[fertIndex].name}} ▾</view>
+      </picker>
+
+      <view class="field">
+        <text class="field-l">种植格数</text>
+        <slider min="1" max="200" step="1" value="{{tiles}}" show-value activeColor="#E8913A" bindchange="onTiles" />
+      </view>
+      <view class="field">
+        <text class="field-l">可种植天数（一季 28）</text>
+        <slider min="1" max="28" step="1" value="{{days}}" show-value activeColor="#E8913A" bindchange="onDays" />
+      </view>
+    </view>
+
+    <view class="card result">
+      <view class="card-h">一季预估</view>
+      <view class="res-row"><text>有效生长天数</text><text class="res-v">{{result.growDays}} 天</text></view>
+      <view class="res-row"><text>收获次数</text><text class="res-v">{{result.harvests}} 次</text></view>
+      <view class="res-row"><text>总收入</text><text class="res-v">{{result.revenue}}g</text></view>
+      <view class="res-row"><text>成本（种子+肥料）</text><text class="res-v">{{result.cost}}g</text></view>
+      <view class="res-row"><text>经验估算</text><text class="res-v">{{result.exp}}</text></view>
+      <view class="res-row"><text>单格净利</text><text class="res-v">{{result.perTileProfit}}g</text></view>
+      <view class="res-row big"><text>净利润</text><text class="res-v profit">{{result.profit}}g</text></view>
+      <view class="res-note">* 普通品质基准 + 肥料品质加成简化估算，无农民职业额外加成</view>
+      <view class="btn-row">
+        <view class="btn-main" bindtap="saveProfit">保存记录</view>
+        <view class="btn-sub {{compareOn ? 'on' : ''}}" bindtap="toggleCompare">{{compareOn ? '关闭对比' : '作物对比'}}</view>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{compareOn}}">
+      <view class="card-h">当季作物对比（按净利润）</view>
+      <view class="cmp-row" wx:for="{{compareResults}}" wx:key="name">
+        <view class="cmp-rank">#{{item.rank}}</view>
+        <view class="cmp-body">
+          <view class="cmp-name">{{item.name}} <text class="cmp-note" wx:if="{{item.note}}">{{item.note}}</text></view>
+          <view class="cmp-meta">收 {{item.harvests}} 次 · 单格 {{item.perTile}}g · 经验 {{item.exp}}</view>
+        </view>
+        <view class="cmp-profit">{{item.profit}}g</view>
+      </view>
+    </view>
+
+    <view class="section-title" wx:if="{{profitHistory.length}}">
+      历史记录
+      <text class="link-clear" bindtap="clearProfitHistory">清空</text>
+    </view>
+    <view class="card hist" wx:for="{{profitHistory}}" wx:key="at">
+      <view class="hist-name">{{item.cropName}} · {{item.fertName}}</view>
+      <view class="hist-meta">{{item.tiles}}格 · {{item.days}}天 · 净利 {{item.profit}}g</view>
+    </view>
+
+  </view>
+
+  <!-- 礼物推荐 -->
+  <view class="panel gift-panel" wx:if="{{tab === 'gift'}}">
+    <view class="gift-search-card">
+      <view class="gift-search-title">搜 NPC 查喜好</view>
+      <view class="gift-search-row">
+        <input
+          class="gift-input"
+          placeholder="输入村民名字，如 艾米丽"
+          value="{{giftKeyword}}"
+          confirm-type="search"
+          bindinput="onGiftInput"
+        />
+        <view class="gift-search-clear" wx:if="{{giftKeyword}}" bindtap="clearGiftSearch">清除</view>
+      </view>
+      <view class="gift-search-hint">支持中文名；点村民可看最爱礼物与爱心事件</view>
+    </view>
+
+    <view class="section-title">{{giftKeyword ? '搜索结果' : '村民列表'}} · {{giftFiltered.length}} 人</view>
+    <view
+      class="card gift-npc"
+      wx:for="{{giftFiltered}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goNpc"
+    >
+      <view class="gift-npc-main">
+        <view class="bday-avatar-wrap">
+          <image wx:if="{{item.avatar}}" class="bday-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view wx:else class="bday-emoji">{{item.emoji}}</view>
+        </view>
+        <view class="bday-body">
+          <view class="bday-name">{{item.name}}<text class="gift-npc-en" wx:if="{{item.en}}"> · {{item.en}}</text></view>
+          <view class="bday-gift" wx:if="{{item.lovesText}}">最爱：{{item.lovesText}}</view>
+          <view class="bday-gift" wx:else>查看最爱礼物 / 爱心事件 ›</view>
+        </view>
+        <view class="gift-npc-arrow">›</view>
+      </view>
+      <view class="gift-love-row" wx:if="{{item.loveIcons && item.loveIcons.length}}">
+        <view class="gift-love-chip" wx:for="{{item.loveIcons}}" wx:for-item="g" wx:key="key">
+          <image wx:if="{{g.icon}}" class="gift-love-icon" src="{{g.icon}}" mode="aspectFit" />
+          <text class="gift-love-name">{{g.name}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{!giftFiltered.length}}" class="empty-tip">没有匹配的村民，试试别的关键字</view>
+
+    <view class="section-title">通用最爱（万金油）</view>
+    <view class="card gift-uni" wx:for="{{universalGifts}}" wx:key="name">
+      <view class="uni-icon-wrap">
+        <image wx:if="{{item.icon}}" class="uni-icon" src="{{item.icon}}" mode="aspectFit" />
+        <text wx:else class="uni-emoji">{{item.emoji}}</text>
+      </view>
+      <view class="uni-body">
+        <view class="uni-name">{{item.name}}</view>
+        <view class="uni-tip">{{item.tip}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 工具升级 -->
+  <view class="panel" wx:if="{{tab === 'upgrade'}}">
+    <view class="card tip">
+      推荐顺序：水壶 → 镐 → 斧 → 锄。一次只能升级一把，克林特需要 2 天。必须按 铜→钢→金→铱 顺序。
+    </view>
+    <view class="card" wx:for="{{upgrades}}" wx:key="name">
+      <view class="card-h">{{item.name}}</view>
+      <view class="level-row" wx:for="{{item.levels}}" wx:for-item="lv" wx:key="tier">
+        <view class="lv-tier">{{lv.tier}}</view>
+        <view class="lv-cost">{{lv.cost}}</view>
+        <view class="lv-days">{{lv.days}}天</view>
+      </view>
+    </view>
+    <navigator url="/pages/bundles/bundles" class="card link-card">🏛️ 社区中心收集包追踪 ›</navigator>
+    <navigator url="/pages/newbie/newbie" class="card link-card">📋 新手两年清单 ›</navigator>
+    <navigator url="/pages/achievements/achievements" class="card link-card">🏆 成就指南 ›</navigator>
+    <navigator url="/pages/special-orders/special-orders" class="card link-card">📋 特别任务订单速刷 ›</navigator>
+    <navigator url="/pages/drop-farm/drop-farm" class="card link-card">⚡ 掉落物速刷（怪物层） ›</navigator>
+  </view>
+</view>

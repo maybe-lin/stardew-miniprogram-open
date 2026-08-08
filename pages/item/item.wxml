@@ -1,0 +1,249 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}" wx:if="{{item}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <!-- 顶部大图区 -->
+  <view class="hero">
+    <view class="hero-bg" wx:if="{{!item.hasIcon}}">{{item.emoji}}</view>
+    <image class="hero-bg-img" wx:if="{{item.hasIcon}}" src="{{item.icon}}" mode="aspectFit" />
+    <view class="hero-main">
+      <view class="hero-icon {{item.outOfSeason ? 'dim' : ''}}">
+        <image wx:if="{{item.hasIcon}}" class="hero-icon-img" src="{{item.icon}}" mode="aspectFit" />
+        <text wx:else>{{item.emoji}}</text>
+      </view>
+      <view class="fav-btn" bindtap="toggleFav">{{favorited ? '⭐' : '☆'}}</view>
+    </view>
+    <view class="hero-info">
+      <view class="hero-name">{{item.name}}</view>
+      <view class="hero-en">{{item.nameEn}}</view>
+      <view class="hero-tags">
+        <text class="tag tag-muted">{{item.categoryName}}</text>
+        <text
+          class="tag tag-season tag-{{s}}"
+          wx:for="{{item.seasons}}"
+          wx:for-item="s"
+          wx:key="*this"
+        >{{s === 'spring' ? '春' : s === 'summer' ? '夏' : s === 'fall' ? '秋' : '冬'}}</text>
+        <text class="tag tag-rain" wx:if="{{item.rainOnly}}">雨天限定</text>
+        <text class="tag tag-out" wx:if="{{item.outOfSeason}}">当前过季</text>
+        <text class="tag tag-in" wx:if="{{item.inSeason && item.seasons.length}}">当前当季</text>
+      </view>
+      <view class="progress-mini">进度：{{progressText}}</view>
+    </view>
+  </view>
+
+  <!-- Tab -->
+  <view class="tabs">
+    <view class="tab {{tab === 'base' ? 'active' : ''}}" data-tab="base" bindtap="switchTab">基础</view>
+    <view class="tab {{tab === 'source' ? 'active' : ''}}" data-tab="source" bindtap="switchTab">获取</view>
+    <view class="tab {{tab === 'chain' ? 'active' : ''}}" data-tab="chain" bindtap="switchTab">关联</view>
+    <view class="tab {{tab === 'social' ? 'active' : ''}}" data-tab="social" bindtap="switchTab">社交</view>
+  </view>
+
+  <!-- 基础 -->
+  <view class="panel" wx:if="{{tab === 'base'}}">
+    <view class="card" wx:if="{{item.category !== 'book'}}">
+      <view class="desc">{{item.desc}}</view>
+      <view class="rain-alert" wx:if="{{item.rainOnly}}">☔ 雨天限定：只在下雨天可获取</view>
+    </view>
+
+    <view class="card" wx:if="{{item.category !== 'book'}}">
+      <view class="card-h">售价计算器</view>
+      <view class="quality-row">
+        <view class="quality-chip {{quality === 'normal' ? 'on' : ''}}" data-q="normal" bindtap="setQuality">普通</view>
+        <view class="quality-chip {{quality === 'silver' ? 'on' : ''}}" data-q="silver" bindtap="setQuality">银星</view>
+        <view class="quality-chip {{quality === 'gold' ? 'on' : ''}}" data-q="gold" bindtap="setQuality">金星</view>
+        <view class="quality-chip {{quality === 'iridium' ? 'on' : ''}}" data-q="iridium" bindtap="setQuality">铱星</view>
+      </view>
+
+      <slider min="0" max="3" step="1" value="{{qualityIndex}}" activeColor="#E8913A" backgroundColor="#E8D5B0" block-size="20" bindchange="onSlider" />
+
+      <view class="price-display">
+        <view class="price-main">{{currentPrice}}<text class="g">g</text></view>
+        <view class="price-sub">基础价 {{item.basePrice}}g · 品质倍率已计入</view>
+      </view>
+
+      <view class="boost-row" wx:if="{{hasProfBoost || item.sellMult > 1}}">
+        <switch checked="{{professionOn}}" color="#E8913A" bindchange="onProfession" />
+        <view class="boost-texts">
+          <text class="boost-label">按「改进度」职业算售价 {{profMultText}}</text>
+          <text class="boost-hint" wx:if="{{profBoostLabel}}">{{profBoostLabel}}</text>
+        </view>
+        <text class="boost-price" wx:if="{{professionOn}}">→ {{boostPrice}}g</text>
+      </view>
+      <view class="boost-tip" wx:if="{{item.sellMult > 1 || hasProfBoost}}">
+        未勾选为无职业基础价；勾选后使用你在「改进度」里选的职业加成
+      </view>
+
+      <view class="price-grid">
+        <view class="pg"><view class="pg-l">普通</view><view class="pg-v">{{item.prices.normal}}g</view></view>
+        <view class="pg"><view class="pg-l">银星</view><view class="pg-v">{{item.prices.silver}}g</view></view>
+        <view class="pg"><view class="pg-l">金星</view><view class="pg-v">{{item.prices.gold}}g</view></view>
+        <view class="pg"><view class="pg-l">铱星</view><view class="pg-v">{{item.prices.iridium}}g</view></view>
+      </view>
+      <view class="price-grid boost-grid" wx:if="{{item.sellMult > 1}}">
+        <view class="pg-title">职业加成后（{{profBoostLabel}}）</view>
+        <view class="pg"><view class="pg-l">普通</view><view class="pg-v">{{item.pricesBoost.normal}}g</view></view>
+        <view class="pg"><view class="pg-l">银星</view><view class="pg-v">{{item.pricesBoost.silver}}g</view></view>
+        <view class="pg"><view class="pg-l">金星</view><view class="pg-v">{{item.pricesBoost.gold}}g</view></view>
+        <view class="pg"><view class="pg-l">铱星</view><view class="pg-v">{{item.pricesBoost.iridium}}g</view></view>
+      </view>
+    </view>
+
+    <view class="card book-effect" wx:else>
+      <view class="card-h">📖 阅读效果</view>
+      <view class="desc">{{item.desc}}</view>
+      <view class="book-once" wx:if="{{item.isAbilityBook}}">永久能力书通常只需阅读一次；重复获得时可留作赠礼或兑换。</view>
+      <view class="book-once" wx:if="{{item.isExperienceBook}}">经验书可以重复阅读，技能满级后会转化为精通点数。</view>
+    </view>
+
+    <view class="card collect-card" bindtap="toggleCollect">
+      <text>{{collected ? '✅ 已记入图鉴' : '⬜ 标记为已收集'}}</text>
+    </view>
+  </view>
+
+  <!-- 获取 -->
+  <view class="panel" wx:if="{{tab === 'source'}}">
+    <!-- 料理：菜谱怎么学（痛点） -->
+    <view class="card recipe-learn-card" wx:if="{{item.isCooking && item.recipeLearn.length}}">
+      <view class="card-h">📺 菜谱怎么学</view>
+      <view class="recipe-learn-tip">差一个菜谱？看这里：电视有固定放送日，错过要等次年同奇/偶数年；周三重播可能补漏。</view>
+      <view class="recipe-learn-row" wx:for="{{item.recipeLearn}}" wx:key="key" wx:for-item="ls">
+        <view class="recipe-learn-badge">{{ls.badge}}</view>
+        <view class="recipe-learn-body">
+          <view class="recipe-learn-title">{{ls.label}}<text class="recipe-learn-short" wx:if="{{ls.short}}"> · {{ls.short}}</text></view>
+          <view class="recipe-learn-detail">{{ls.detail}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card" wx:for="{{item.sources}}" wx:key="key" wx:for-item="src" wx:if="{{!src.isRecipeLearn}}">
+      <view class="source-tag-row">
+        <view class="tag tag-source source-click" data-link="{{src.link}}" data-type="{{src.type}}" bindtap="onSourceTap">【{{src.label}}】</view>
+        <text class="tag tag-rain" wx:if="{{item.rainOnly}}">雨天限定</text>
+      </view>
+      <view class="source-detail">{{src.detail}}</view>
+      <view class="source-hint" wx:if="{{src.link}}">点击标签可跳转相关列表 ›</view>
+    </view>
+    <view class="card" wx:if="{{!item.sources.length && !(item.isCooking && item.recipeLearn.length)}}">
+      <view class="desc">暂无详细获取途径</view>
+    </view>
+  </view>
+
+  <!-- 关联：合成 / 用途 / 谁需要 -->
+  <view class="panel" wx:if="{{tab === 'chain'}}">
+    <view class="card" wx:if="{{relations.recipe}}">
+      <view class="card-h">🔧 合成配方</view>
+      <view class="recipe-out">产物：{{relations.recipe.output}}</view>
+      <view
+        class="mat-row {{mat.rare ? 'rare' : ''}}"
+        wx:for="{{relations.recipe.materials}}"
+        wx:for-item="mat"
+        wx:key="name"
+        data-id="{{mat.itemId}}"
+        bindtap="goRelated"
+      >
+        <text class="mat-name">{{mat.name}}</text>
+        <text class="mat-count">×{{mat.count}}</text>
+        <text class="mat-rare" wx:if="{{mat.rare}}">稀有</text>
+      </view>
+      <view class="recipe-learn-inline" wx:if="{{relations.recipe.primaryLearn.length}}">
+        <view class="recipe-learn-inline-h">菜谱获取</view>
+        <view class="recipe-learn-inline-row" wx:for="{{relations.recipe.primaryLearn}}" wx:key="key" wx:for-item="ls">
+          <text class="recipe-learn-inline-badge">{{ls.badge}}</text>
+          <text class="recipe-learn-inline-text">{{ls.short || ls.detail}}</text>
+        </view>
+        <view class="recipe-learn-inline-more" bindtap="goSourceTab">查看完整获取说明 ›</view>
+      </view>
+    </view>
+    <view class="card" wx:else>
+      <view class="card-h">🔧 合成配方</view>
+      <view class="empty-mini">此物品无合成配方（或尚未收录）</view>
+    </view>
+
+    <view class="card">
+      <view class="card-h">➡️ 能用来做什么</view>
+      <view wx:if="{{relations.uses.length}}">
+        <view class="use-row" wx:for="{{relations.uses}}" wx:for-item="u" wx:key="text">
+          <text class="use-dot">·</text>
+          <text>{{u.text}}</text>
+        </view>
+      </view>
+      <view class="empty-mini" wx:else>暂无用途数据</view>
+    </view>
+
+    <view class="card">
+      <view class="card-h">🙋 谁需要它</view>
+      <view wx:if="{{relations.neededBy.length}}">
+        <view
+          class="need-row"
+          wx:for="{{relations.neededBy}}"
+          wx:for-item="n"
+          wx:key="name"
+          data-id="{{n.relatedId}}"
+          bindtap="goRelated"
+        >
+          <view class="need-type">{{n.type === 'gift_love' ? '❤️最爱' : n.type === 'gift_like' ? '💚喜欢' : n.type === 'bundle' ? '🏛️收集包' : n.type === 'craft' ? '🔧合成' : n.type === 'upgrade' ? '⚒️升级' : '📌'}}</view>
+          <view class="need-body">
+            <view class="need-name">{{n.name}}</view>
+            <view class="need-detail" wx:if="{{n.detail}}">{{n.detail}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="empty-mini" wx:else>暂无关联需求</view>
+    </view>
+  </view>
+
+  <!-- 社交 -->
+  <view class="panel" wx:if="{{tab === 'social'}}">
+    <view class="card">
+      <view class="card-h love">❤️ 最爱这件礼物</view>
+      <view class="villager-grid" wx:if="{{item.lovedVillagers.length}}">
+        <view class="villager" wx:for="{{item.lovedVillagers}}" wx:for-item="v" wx:key="id">
+          <view class="v-avatar-wrap love-ring">
+            <image wx:if="{{v.avatar}}" class="v-avatar" src="{{v.avatar}}" mode="aspectFill" />
+            <view wx:else class="v-emoji">{{v.emoji}}</view>
+          </view>
+          <view class="v-name">{{v.name}}</view>
+        </view>
+      </view>
+      <view class="empty-mini" wx:else>没有特别最爱的村民记录</view>
+    </view>
+
+    <view class="card" wx:if="{{item.likedVillagers.length}}">
+      <view class="card-h like">💚 喜欢</view>
+      <view class="villager-grid">
+        <view class="villager" wx:for="{{item.likedVillagers}}" wx:for-item="v" wx:key="id">
+          <view class="v-avatar-wrap like-ring">
+            <image wx:if="{{v.avatar}}" class="v-avatar" src="{{v.avatar}}" mode="aspectFill" />
+            <view wx:else class="v-emoji">{{v.emoji}}</view>
+          </view>
+          <view class="v-name">{{v.name}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-h hate">💔 讨厌</view>
+      <view class="villager-grid" wx:if="{{item.hatedVillagers.length}}">
+        <view class="villager" wx:for="{{item.hatedVillagers}}" wx:for-item="v" wx:key="id">
+          <view class="v-avatar-wrap hate-ring">
+            <image wx:if="{{v.avatar}}" class="v-avatar" src="{{v.avatar}}" mode="aspectFill" />
+            <view wx:else class="v-emoji">{{v.emoji}}</view>
+          </view>
+          <view class="v-name">{{v.name}}</view>
+        </view>
+      </view>
+      <view class="empty-mini" wx:else>没有特别讨厌的村民记录</view>
+    </view>
+  </view>
+</view>
+
+<view class="page empty" wx:else>
+  <view class="empty">物品不存在</view>
+</view>

@@ -1,0 +1,257 @@
+.page-main {
+  padding: 20rpx 28rpx 48rpx;
+}
+
+.hero {
+  background: rgba(255, 248, 231, 0.96) !important;
+  padding: 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.hero-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 10rpx;
+}
+
+.hero-sub {
+  font-size: 24rpx;
+  color: var(--text-sub);
+  line-height: 1.55;
+  margin-bottom: 16rpx;
+}
+
+.meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  margin-bottom: 18rpx;
+}
+
+.meta {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
+.stat-row {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 18rpx;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  background: rgba(232, 145, 58, 0.12);
+  border-radius: 16rpx;
+  padding: 14rpx 8rpx;
+  border: 1rpx solid rgba(232, 145, 58, 0.25);
+}
+
+.stat-n {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.stat-l {
+  font-size: 20rpx;
+  color: var(--text-muted);
+  margin-top: 4rpx;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.btn {
+  flex: 1;
+  min-width: 28%;
+  text-align: center;
+  background: var(--primary);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  padding: 14rpx 10rpx;
+  border-radius: 999rpx;
+}
+
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--primary-dark);
+  border: 2rpx solid var(--border);
+}
+
+.tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16rpx;
+  border: 1rpx solid var(--border);
+  overflow: hidden;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow);
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #888;
+}
+
+.tab.on {
+  background: var(--primary);
+  color: #fff;
+}
+
+.section-tip {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-bottom: 12rpx;
+  padding: 0 4rpx;
+  line-height: 1.45;
+}
+
+.reward {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 12rpx;
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+
+.reward.tall {
+  align-items: flex-start;
+}
+
+.r-left {
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.r-count {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.r-bar-wrap {
+  height: 8rpx;
+  background: #f0e6d4;
+  border-radius: 999rpx;
+  margin-top: 8rpx;
+  overflow: hidden;
+}
+
+.r-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #E8913A, #f0c06a);
+  border-radius: 999rpx;
+}
+
+.r-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  min-width: 0;
+}
+
+.r-emoji {
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.r-emoji-big {
+  font-size: 40rpx;
+  flex-shrink: 0;
+  width: 48rpx;
+  text-align: center;
+}
+
+.r-name {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.r-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.r-cond {
+  font-size: 22rpx;
+  color: var(--text-sub);
+  margin-top: 6rpx;
+  line-height: 1.45;
+}
+
+.link-card {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2rpx solid var(--border);
+  border-radius: 16rpx;
+  padding: 22rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 8rpx 0 16rpx;
+  box-shadow: var(--shadow);
+}
+
+.block {
+  background: rgba(255, 255, 255, 0.96) !important;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.block-title {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14rpx;
+}
+
+.ach {
+  padding: 12rpx 0;
+  border-top: 1rpx solid #f0ebe0;
+}
+
+.ach:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.ach-name {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ach-desc {
+  font-size: 22rpx;
+  color: var(--text-sub);
+  margin-top: 4rpx;
+}
+
+.tip {
+  font-size: 24rpx;
+  color: var(--text-sub);
+  line-height: 1.55;
+  margin-bottom: 8rpx;
+}
+
+.footer {
+  text-align: center;
+  font-size: 20rpx;
+  color: var(--text-muted);
+  padding: 12rpx 0 30rpx;
+}

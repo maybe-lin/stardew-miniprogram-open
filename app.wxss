@@ -1,0 +1,498 @@
+/* ========== 行之助手 · 帕鲁式卡片 UI ==========
+ * 浅米色 / 橙色强调 / 大卡片 / 高对比
+ */
+
+page {
+  --bg: #E8D4B0;
+  --bg-card: rgba(255, 248, 231, 0.92);
+  --bg-soft: rgba(240, 224, 192, 0.9);
+  --primary: #E8913A;
+  --primary-dark: #C26C1C;
+  --text: #3D2B1F;
+  --text-sub: #6B5540;
+  --text-muted: #8B7355;
+  --border: rgba(232, 213, 176, 0.95);
+  --tag-spring: #5cb85c;
+  --tag-summer: #f0ad4e;
+  --tag-fall: #d9534f;
+  --tag-winter: #5bc0de;
+  --love: #e74c3c;
+  --like: #27ae60;
+  --hate: #7f8c8d;
+  --shadow: 0 4rpx 16rpx rgba(61, 43, 31, 0.1);
+
+  /* 整张背景图铺满屏幕（不裁切） */
+  background-color: #7EC8E3;
+  background-image: url('/images/app-bg.jpg');
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-size: 28rpx;
+  color: var(--text);
+  box-sizing: border-box;
+  height: 100%;
+}
+
+view,
+scroll-view,
+swiper,
+image,
+input,
+textarea,
+button {
+  box-sizing: border-box;
+}
+
+/* 维基/版权页脚通用 */
+.wiki-foot {
+  opacity: 0.9;
+  margin-top: 12rpx !important;
+}
+
+/* 深色模式
+ * 注意：class="dark" 加在根 <view class="page dark"> 上，不是 page 节点。
+ * 必须用 .page.dark；裸写 page.dark 永远匹配不到。
+ */
+.page.dark {
+  --bg: #1a1520;
+  --bg-card: rgba(42, 34, 48, 0.92);
+  --bg-soft: rgba(53, 42, 58, 0.9);
+  --primary: #E8913A;
+  --primary-dark: #f0a85a;
+  --text: #F5E6C8;
+  --text-sub: #c4b09a;
+  --text-muted: #8a7a6a;
+  --border: rgba(61, 51, 69, 0.95);
+  --shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.35);
+  background-color: #1a1520;
+  background-image: linear-gradient(rgba(20, 14, 28, 0.55), rgba(20, 14, 28, 0.55)), url('/images/app-bg.jpg');
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  color: var(--text);
+}
+
+/* 固定底层图：铺满视口，整张图拉伸显示（不裁切）
+ * z-index:-1 保证不盖住页面内容（微信里 fixed+0 容易挡住 UI） */
+.page-bg {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+  transition: opacity 0.25s ease;
+}
+
+/* ========== 季节主题（随设置里的游戏季节切换）========== */
+/* 四季：顶栏/导航/页面 --bg 同色，渐变只做轻微明暗，避免上下两截色 */
+/* 春季：嫩绿 + 花朵 */
+.page.season-spring {
+  --bg: #E5F2D8;
+  --bg-card: rgba(255, 252, 245, 0.96);
+  --bg-soft: rgba(220, 240, 200, 0.9);
+  --primary: #6BBF59;
+  --primary-dark: #4A9A3C;
+  --text: #2F3D28;
+  --text-sub: #5A6B4E;
+  --text-muted: #7A8B6E;
+  --border: rgba(150, 190, 120, 0.75);
+  --shadow: 0 4rpx 16rpx rgba(70, 100, 50, 0.1);
+  --season-glow: rgba(255, 180, 200, 0.3);
+  background: linear-gradient(180deg, #E5F2D8 0%, #EAF5DE 55%, #F3F7EA 100%) !important;
+}
+.page.season-spring .page-bg { opacity: 0.14; }
+
+/* 夏季：浅蓝 + 阳光 */
+.page.season-summer {
+  --bg: #D4EEF8;
+  --bg-card: rgba(255, 252, 245, 0.96);
+  --bg-soft: rgba(200, 232, 245, 0.9);
+  --primary: #3BA3D0;
+  --primary-dark: #2A7FA8;
+  --text: #1E3540;
+  --text-sub: #4A6570;
+  --text-muted: #6A8490;
+  --border: rgba(120, 190, 220, 0.7);
+  --shadow: 0 4rpx 16rpx rgba(40, 100, 130, 0.1);
+  --season-glow: rgba(255, 220, 100, 0.32);
+  background: linear-gradient(180deg, #D4EEF8 0%, #DDF1F9 55%, #E8F5FA 100%) !important;
+}
+.page.season-summer .page-bg { opacity: 0.12; }
+
+/* 秋季：橙黄 + 落叶感 */
+.page.season-fall {
+  --bg: #F5E0C0;
+  --bg-card: rgba(255, 248, 235, 0.96);
+  --bg-soft: rgba(245, 220, 180, 0.92);
+  --primary: #E8913A;
+  --primary-dark: #C26C1C;
+  --text: #3D2B1F;
+  --text-sub: #6B5540;
+  --text-muted: #8B7355;
+  --border: rgba(220, 170, 100, 0.75);
+  --shadow: 0 4rpx 16rpx rgba(120, 70, 30, 0.1);
+  --season-glow: rgba(220, 90, 50, 0.22);
+  background: linear-gradient(180deg, #F5E0C0 0%, #F6E4C8 55%, #F8EAD4 100%) !important;
+}
+.page.season-fall .page-bg { opacity: 0.12; }
+
+/* 冬季：雪白 + 暖强调 */
+.page.season-winter {
+  --bg: #E8F0F5;
+  --bg-card: rgba(255, 252, 248, 0.97);
+  --bg-soft: rgba(230, 240, 248, 0.94);
+  --primary: #E8A05A;
+  --primary-dark: #C47A30;
+  --text: #2A3540;
+  --text-sub: #5A6A78;
+  --text-muted: #7A8A98;
+  --border: rgba(170, 200, 220, 0.75);
+  --shadow: 0 4rpx 18rpx rgba(60, 90, 120, 0.08);
+  --season-glow: rgba(255, 200, 140, 0.28);
+  background: linear-gradient(180deg, #E8F0F5 0%, #EDF3F7 55%, #F2F6F9 100%) !important;
+}
+.page.season-winter .page-bg { opacity: 0.1; }
+
+/* 深色 + 季节：保留暗底，叠加淡淡季节色 */
+.page.dark.season-spring {
+  --bg: #1a2018;
+  --bg-card: rgba(36, 48, 34, 0.94);
+  --bg-soft: rgba(48, 62, 44, 0.9);
+  --primary: #7DCF6A;
+  --primary-dark: #9AE085;
+  --text: #E8F0DC;
+  --text-sub: #B0C4A0;
+  --text-muted: #889A78;
+  --border: rgba(80, 110, 70, 0.85);
+  background: linear-gradient(165deg, #1a2818 0%, #1a2018 50%, #222018 100%) !important;
+}
+.page.dark.season-summer {
+  --bg: #141c24;
+  --bg-card: rgba(32, 44, 56, 0.94);
+  --bg-soft: rgba(40, 56, 70, 0.9);
+  --primary: #5BB8E0;
+  --primary-dark: #7CCCEC;
+  --text: #E0F0F8;
+  --text-sub: #A0B8C8;
+  --text-muted: #7890A0;
+  --border: rgba(60, 100, 130, 0.85);
+  background: linear-gradient(165deg, #102030 0%, #141c24 55%, #1a1810 100%) !important;
+}
+.page.dark.season-fall {
+  --bg: #1c1610;
+  --bg-card: rgba(48, 38, 28, 0.94);
+  --bg-soft: rgba(58, 46, 34, 0.9);
+  --primary: #E8913A;
+  --primary-dark: #f0a85a;
+  --text: #F5E6C8;
+  --text-sub: #c4b09a;
+  --text-muted: #8a7a6a;
+  --border: rgba(90, 70, 50, 0.9);
+  background: linear-gradient(165deg, #2a1c10 0%, #1c1610 55%, #1a1410 100%) !important;
+}
+.page.dark.season-winter {
+  --bg: #121820;
+  --bg-card: rgba(34, 42, 52, 0.94);
+  --bg-soft: rgba(44, 54, 66, 0.9);
+  --primary: #E8A05A;
+  --primary-dark: #f0b878;
+  --text: #E8F0F8;
+  --text-sub: #A8B8C8;
+  --text-muted: #788898;
+  --border: rgba(70, 90, 110, 0.85);
+  background: linear-gradient(165deg, #101820 0%, #121820 50%, #1a1612 100%) !important;
+}
+.page.dark .page-bg { opacity: 0.12; }
+
+/* 季节装饰层：固定底层光斑，不挡点击、不压正文 */
+.season-deco {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/*
+ * 页面正文一律抬到装饰层之上。
+ * 原先只枚举部分 class，item/list/toolbox 等直接子节点会与 season-deco 叠字。
+ */
+.page > view:not(.season-deco),
+.page > scroll-view,
+.page > navigator {
+  position: relative;
+  z-index: 1;
+}
+
+.season-deco .flake {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+}
+
+/* 春：花瓣/圆点 */
+.page.season-spring .season-deco .flake {
+  background: radial-gradient(circle, rgba(255, 160, 190, 0.85) 0%, rgba(180, 230, 140, 0.2) 70%, transparent 100%);
+}
+.page.season-spring .season-deco .f1 { width: 48rpx; height: 48rpx; left: 8%; top: 12%; }
+.page.season-spring .season-deco .f2 { width: 32rpx; height: 32rpx; right: 12%; top: 22%; opacity: 0.4; }
+.page.season-spring .season-deco .f3 { width: 40rpx; height: 40rpx; left: 18%; bottom: 18%; opacity: 0.35; }
+.page.season-spring .season-deco .f4 { width: 24rpx; height: 24rpx; right: 20%; bottom: 28%; }
+.page.season-spring .season-deco .f5 { width: 56rpx; height: 56rpx; right: 6%; top: 48%; opacity: 0.3; }
+
+/* 夏：阳光光斑（压在四角，避免盖住中间正文） */
+.page.season-summer .season-deco .flake {
+  background: radial-gradient(circle, rgba(255, 230, 120, 0.75) 0%, rgba(120, 200, 240, 0.15) 65%, transparent 100%);
+}
+.page.season-summer .season-deco .f1 { width: 120rpx; height: 120rpx; right: -20rpx; top: -10rpx; opacity: 0.55; }
+.page.season-summer .season-deco .f2 { width: 48rpx; height: 48rpx; left: 4%; top: 8%; opacity: 0.28; }
+.page.season-summer .season-deco .f3 { width: 36rpx; height: 36rpx; right: 8%; bottom: 18%; opacity: 0.25; }
+.page.season-summer .season-deco .f4 { width: 72rpx; height: 72rpx; left: -8rpx; bottom: 6%; opacity: 0.24; }
+.page.season-summer .season-deco .f5 { width: 24rpx; height: 24rpx; right: 12%; top: 12%; opacity: 0.3; }
+
+/* 秋：落叶色块（椭圆旋转感） */
+.page.season-fall .season-deco .flake {
+  border-radius: 60% 40% 50% 50%;
+  background: linear-gradient(135deg, rgba(232, 120, 50, 0.55), rgba(220, 160, 60, 0.25));
+  transform: rotate(-25deg);
+}
+.page.season-fall .season-deco .f1 { width: 36rpx; height: 22rpx; left: 10%; top: 14%; }
+.page.season-fall .season-deco .f2 { width: 28rpx; height: 18rpx; right: 14%; top: 28%; transform: rotate(20deg); opacity: 0.4; }
+.page.season-fall .season-deco .f3 { width: 32rpx; height: 20rpx; left: 22%; bottom: 20%; transform: rotate(40deg); }
+.page.season-fall .season-deco .f4 { width: 24rpx; height: 16rpx; right: 10%; bottom: 32%; transform: rotate(-50deg); opacity: 0.35; }
+.page.season-fall .season-deco .f5 { width: 40rpx; height: 24rpx; right: 28%; top: 58%; transform: rotate(10deg); opacity: 0.3; }
+
+/* 冬：雪花点 + 暖光 */
+.page.season-winter .season-deco .flake {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(200, 220, 240, 0.2) 70%, transparent 100%);
+  box-shadow: 0 0 8rpx rgba(255, 255, 255, 0.5);
+}
+.page.season-winter .season-deco .f1 { width: 16rpx; height: 16rpx; left: 12%; top: 10%; }
+.page.season-winter .season-deco .f2 { width: 12rpx; height: 12rpx; right: 18%; top: 18%; opacity: 0.7; }
+.page.season-winter .season-deco .f3 { width: 20rpx; height: 20rpx; left: 30%; top: 40%; opacity: 0.5; }
+.page.season-winter .season-deco .f4 { width: 14rpx; height: 14rpx; right: 12%; bottom: 30%; }
+.page.season-winter .season-deco .f5 {
+  width: 100rpx; height: 100rpx; right: -10rpx; bottom: 8%;
+  opacity: 0.45;
+  background: radial-gradient(circle, rgba(255, 200, 140, 0.5) 0%, transparent 70%);
+  box-shadow: none;
+}
+
+/* 内容层：统一抬高，避免被背景盖住 */
+.page-main {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 平板和横屏不无限拉宽内容，窄屏则自动收紧卡片留白。 */
+@media (min-width: 600px) {
+  .page-main {
+    width: 720px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.page {
+  min-height: 100vh;
+  background: transparent !important;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+}
+
+/* 卡片 */
+.card {
+  background: var(--bg-card);
+  border-radius: 24rpx;
+  border: 2rpx solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.card:active {
+  transform: scale(0.98);
+  opacity: 0.95;
+}
+
+/* 标题 */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin: 28rpx 8rpx 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.section-title::before {
+  content: '';
+  width: 8rpx;
+  height: 28rpx;
+  background: var(--primary);
+  border-radius: 4rpx;
+}
+
+/* 标签 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+  margin-right: 8rpx;
+  margin-bottom: 6rpx;
+}
+
+.tag-season {
+  color: #fff;
+}
+.tag-spring { background: var(--tag-spring); }
+.tag-summer { background: var(--tag-summer); }
+.tag-fall { background: var(--tag-fall); }
+.tag-winter { background: var(--tag-winter); }
+.tag-source {
+  background: rgba(232, 145, 58, 0.15);
+  color: var(--primary-dark);
+  border: 1rpx solid rgba(232, 145, 58, 0.35);
+}
+.tag-muted {
+  background: var(--bg-soft);
+  color: var(--text-sub);
+}
+
+/* 物品列表行 */
+.item-row {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  border-radius: 20rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow);
+}
+.item-row:active {
+  transform: scale(0.98);
+  border-color: var(--primary);
+}
+
+.item-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 20rpx;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  border: 2rpx solid var(--border);
+  overflow: hidden;
+}
+
+.item-icon-img {
+  width: 72rpx;
+  height: 72rpx;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8rpx;
+}
+
+.item-meta {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.item-price {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+/* 按钮 */
+.btn-primary {
+  background: linear-gradient(180deg, #F0A85A 0%, #E8913A 100%);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  padding: 22rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid var(--primary-dark);
+  box-shadow: 0 4rpx 0 var(--primary-dark);
+}
+.btn-primary:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 0 var(--primary-dark);
+}
+
+.btn-ghost {
+  background: var(--bg-soft);
+  color: var(--text);
+  font-weight: 600;
+  text-align: center;
+  padding: 18rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid var(--border);
+}
+
+/* 进度条 */
+.progress-bar {
+  height: 16rpx;
+  background: var(--bg-soft);
+  border-radius: 999rpx;
+  overflow: hidden;
+  border: 1rpx solid var(--border);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #E8913A, #f0c06a);
+  border-radius: 999rpx;
+}
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  padding: 80rpx 40rpx;
+  color: var(--text-muted);
+  font-size: 26rpx;
+}
+
+@media (max-width: 350px) {
+  .card {
+    padding: 20rpx;
+    border-radius: 20rpx;
+  }
+}

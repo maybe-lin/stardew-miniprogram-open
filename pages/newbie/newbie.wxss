@@ -1,0 +1,127 @@
+.container {
+  min-height: 100vh;
+  padding: 24rpx;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.wiki-card {
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow);
+}
+.wiki-title {
+  font-size: 28rpx;
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin-bottom: 8rpx;
+}
+.wiki-url {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  word-break: break-all;
+  margin-bottom: 8rpx;
+}
+.wiki-tip {
+  font-size: 22rpx;
+  color: var(--text-sub);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+.filter-btn {
+  padding: 12rpx 22rpx;
+  background: var(--bg-card);
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: var(--text-sub);
+  border: 2rpx solid var(--border);
+}
+.filter-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow);
+}
+.phase-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #fff;
+  background: var(--primary);
+  border: 1rpx solid var(--primary-dark);
+  border-radius: 12rpx;
+  padding: 12rpx 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+.checkbox-row:last-child { border-bottom: none; }
+.checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border: 3rpx solid var(--primary);
+  border-radius: 10rpx;
+  margin-right: 20rpx;
+  margin-top: 2rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--bg-soft);
+}
+.checkbox.checked {
+  background: var(--primary);
+  border-color: var(--primary-dark);
+}
+.checkbox.checked::after {
+  content: "✓";
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.item-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6rpx;
+}
+.item-desc {
+  font-size: 24rpx;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+.done-text {
+  color: var(--text-muted) !important;
+  text-decoration: line-through;
+}
+.tag {
+  display: inline-block;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  margin-top: 8rpx;
+}
+.tag-red { background: rgba(217, 83, 79, 0.15); color: #d9534f; }
+.tag-orange { background: rgba(240, 173, 78, 0.2); color: #c78a2e; }
+.tag-green { background: rgba(92, 184, 92, 0.15); color: #3d8b3d; }

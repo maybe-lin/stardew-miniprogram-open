@@ -1,0 +1,89 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="page-main">
+    <view class="hero card">
+      <view class="hero-title">{{meta.emoji}} {{meta.title}}</view>
+      <view class="hero-sub">{{meta.subtitle}}</view>
+      <view class="hero-src">{{meta.source}}</view>
+      <view class="hero-tip" wx:for="{{meta.tips}}" wx:key="*this">· {{item}}</view>
+    </view>
+
+    <view class="tabs">
+      <view class="tab {{tab === 'monster' ? 'on' : ''}}" data-tab="monster" bindtap="switchTab">一、怪物掉落</view>
+      <view class="tab {{tab === 'material' ? 'on' : ''}}" data-tab="material" bindtap="switchTab">二、材料速刷</view>
+      <view class="tab {{tab === 'rule' ? 'on' : ''}}" data-tab="rule" bindtap="switchTab">三、通用原则</view>
+    </view>
+
+    <!-- 怪物掉落（帖子核心） -->
+    <view wx:if="{{tab === 'monster'}}">
+      <view class="section-hint">对应特殊订单任务，请接任务后再刷 😉</view>
+      <view
+        class="card drop-card"
+        wx:for="{{monsters}}"
+        wx:key="id"
+      >
+        <view class="drop-head" data-id="{{item.id}}" bindtap="toggleExpand">
+          <text class="drop-emoji">{{item.emoji}}</text>
+          <view class="drop-titles">
+            <view class="drop-name">刷{{item.name}}</view>
+            <view class="drop-drop">掉落：{{item.drop}}</view>
+          </view>
+          <text class="drop-arrow">{{expandedId === item.id ? '▾' : '›'}}</text>
+        </view>
+
+        <view class="drop-floor" data-text="{{item.floors}}" catchtap="copyFloor">
+          📍 {{item.floors}}
+        </view>
+        <view class="drop-method">{{item.method}}</view>
+        <view class="drop-quest" wx:if="{{item.quest}}">任务：{{item.quest}}</view>
+
+        <view class="drop-detail" wx:if="{{expandedId === item.id}}">
+          <view class="detail-line" wx:if="{{item.floorsAlt}}">备选：{{item.floorsAlt}}</view>
+          <view class="detail-line" wx:for="{{item.detail}}" wx:for-item="d" wx:key="*this">• {{d}}</view>
+          <view class="tag-row">
+            <text class="mini-tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+          </view>
+        </view>
+        <view class="expand-hint" data-id="{{item.id}}" bindtap="toggleExpand">
+          {{expandedId === item.id ? '收起详情' : '展开详情'}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 材料 -->
+    <view wx:if="{{tab === 'material'}}">
+      <view class="card mat-card" wx:for="{{materials}}" wx:key="id">
+        <view class="mat-head">
+          <text class="drop-emoji">{{item.emoji}}</text>
+          <view>
+            <view class="drop-name">{{item.name}}</view>
+            <view class="drop-drop">掉落：{{item.drop}}</view>
+          </view>
+        </view>
+        <view class="drop-floor">📍 {{item.floors}}</view>
+        <view class="drop-method">{{item.method}}</view>
+      </view>
+    </view>
+
+    <!-- 原则 -->
+    <view wx:if="{{tab === 'rule'}}">
+      <view class="card rule-card" wx:for="{{rules}}" wx:key="title">
+        <view class="rule-title">{{item.title}}</view>
+        <view class="rule-desc">{{item.desc}}</view>
+      </view>
+    </view>
+
+    <view class="footer-note">
+      层数与机制以游戏版本为准；社区「5 层刷五彩 / 55·65 刷幽灵 / 71 与 70–80 刷骷髅」为常用速刷点。
+    </view>
+    <view class="footer-note wiki-foot">数据参考星露谷中文维基等公开资料 · 仅供学习 · 非官方 · 请勿商用</view>
+  </view>
+</view>

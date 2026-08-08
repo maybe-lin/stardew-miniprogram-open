@@ -1,0 +1,85 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="filter-bar">
+    <view class="progress-mini" bindtap="goSettings">📅 {{progressText}} · 点此改进度</view>
+    <scroll-view scroll-x class="filter-scroll" enable-flex>
+      <view class="filters">
+        <!-- 料理全年可做，无季节字段：不展示「当季优先」与春夏秋冬 -->
+        <view class="f-chip {{sort === 'default' ? 'on' : ''}}" data-sort="default" bindtap="setSort" wx:if="{{!isCooking}}">当季优先</view>
+        <view class="f-chip {{sort === 'must_first' ? 'on' : ''}}" data-sort="must_first" bindtap="setSort" wx:if="{{isCooking}}">推荐优先</view>
+        <view class="f-chip {{onlyMustCook ? 'on' : ''}}" bindtap="toggleMustCook" wx:if="{{isCooking}}">只看推荐</view>
+        <view class="f-chip {{sort === 'price_desc' ? 'on' : ''}}" data-sort="price_desc" bindtap="setSort">售价↓</view>
+        <view class="f-chip {{sort === 'price_asc' ? 'on' : ''}}" data-sort="price_asc" bindtap="setSort">售价↑</view>
+        <view class="f-chip {{sort === 'difficulty' ? 'on' : ''}}" data-sort="difficulty" bindtap="setSort">难度↓</view>
+        <block wx:if="{{!isCooking}}">
+          <view class="f-chip {{season === 'spring' ? 'on' : ''}}" data-season="spring" bindtap="setSeason">春</view>
+          <view class="f-chip {{season === 'summer' ? 'on' : ''}}" data-season="summer" bindtap="setSeason">夏</view>
+          <view class="f-chip {{season === 'fall' ? 'on' : ''}}" data-season="fall" bindtap="setSeason">秋</view>
+          <view class="f-chip {{season === 'winter' ? 'on' : ''}}" data-season="winter" bindtap="setSeason">冬</view>
+        </block>
+      </view>
+    </scroll-view>
+    <view class="hint-long">长按物品可快捷操作</view>
+  </view>
+
+  <scroll-view
+    class="list-scroll"
+    scroll-y
+    scroll-top="{{scrollTop}}"
+    scroll-with-animation="{{false}}"
+    bindscroll="onScroll"
+  >
+    <view class="list-wrap">
+      <view class="count" wx:if="{{isCooking}}">
+        共 {{list.length}} 道料理
+        <text wx:if="{{mustCount}}"> · 推荐 {{mustCount}} 道</text>
+        <text wx:if="{{onlyMustCook}}">（仅推荐）</text>
+      </view>
+      <view class="count" wx:else>共 {{list.length}} 项 · 过季已置灰</view>
+      <view wx:if="{{!list.length}}" class="empty">暂无数据</view>
+      <view
+        class="item-row {{item.outOfSeason ? 'out-season' : ''}}"
+        wx:for="{{list}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="goItem"
+        bindlongpress="onLongPress"
+      >
+        <view class="item-icon">
+          <image wx:if="{{item.hasIcon}}" class="item-icon-img" src="{{item.icon}}" mode="aspectFit" />
+          <text wx:else>{{item.emoji}}</text>
+        </view>
+        <view class="item-body">
+          <view class="item-name">
+            {{item.name}}
+            <text class="badge-must" wx:if="{{item.isMustCook}}">推荐</text>
+            <text class="badge-in" wx:if="{{item.inSeason && item.seasons.length}}">当季</text>
+            <text class="badge-out" wx:if="{{item.outOfSeason}}">过季</text>
+            <text class="badge-rain" wx:if="{{item.rainOnly}}">雨天</text>
+          </view>
+          <view class="tags">
+            <text
+              class="tag tag-season tag-{{s}}"
+              wx:for="{{item.seasons}}"
+              wx:for-item="s"
+              wx:key="*this"
+            >{{s === 'spring' ? '春' : s === 'summer' ? '夏' : s === 'fall' ? '秋' : '冬'}}</text>
+          </view>
+          <view class="item-meta">
+            {{item.sources[0] ? (item.sources[0].label + ' / ' + item.sources[0].detail) : item.categoryName}}
+          </view>
+        </view>
+        <view class="item-price" wx:if="{{item.basePrice}}">{{item.basePrice}}g</view>
+        <view class="item-price" wx:elif="{{item.category === 'book'}}">阅读</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

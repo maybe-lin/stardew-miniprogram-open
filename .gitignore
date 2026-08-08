@@ -1,0 +1,30 @@
+# Python / local tools
+.venv-img/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Dev-only assets (not needed for miniprogram)
+_dev_unused/
+
+# 半开源：完整图鉴/NPC/料理数据包（仅本地，勿提交公开仓）
+data/private/
+
+# WeChat local
+miniprogram_npm/
+.tea/
+*.orig.jpg
+
+# miniprogram-ci 密钥与产物（切勿提交）
+node_modules/
+package-lock.json
+private*.key
+keys/
+preview-qrcode.*
+preview-info.json
+*.sourcemap.zip
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp

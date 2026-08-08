@@ -1,0 +1,40 @@
+<view class="container">
+  <!-- 维基入口 -->
+  <view class="wiki-card" bindtap="openWiki" bindlongpress="copyWiki">
+    <view class="wiki-title">📖 官方新手指南（维基）</view>
+    <view class="wiki-url">zh.stardewvalleywiki.com/新手指南</view>
+    <view class="wiki-tip">点击直接打开 · 长按复制链接</view>
+  </view>
+
+  <!-- 筛选 -->
+  <view class="filter-bar">
+    <view 
+      class="filter-btn {{currentFilter === item ? 'active' : ''}}" 
+      wx:for="{{filters}}" 
+      wx:key="*this"
+      data-filter="{{item}}"
+      bindtap="onFilter"
+    >{{item}}</view>
+  </view>
+
+  <!-- 任务列表 -->
+  <view class="card" wx:for="{{filteredList}}" wx:key="phase">
+    <view class="phase-title">{{item.phase}}</view>
+    
+    <view 
+      class="checkbox-row" 
+      wx:for="{{item.tasks}}" 
+      wx:for-item="task" 
+      wx:key="id"
+      data-id="{{task.id}}"
+      bindtap="toggleCheck"
+    >
+      <view class="checkbox {{progress[task.id] ? 'checked' : ''}}"></view>
+      <view class="item-content">
+        <view class="item-title {{progress[task.id] ? 'done-text' : ''}}">{{task.title}}</view>
+        <view class="item-desc" wx:if="{{task.desc}}">{{task.desc}}</view>
+        <view class="priority tag {{task.priority === '必做' ? 'tag-red' : (task.priority === '高' ? 'tag-orange' : 'tag-green')}}">{{task.priority}}</view>
+      </view>
+    </view>
+  </view>
+</view>

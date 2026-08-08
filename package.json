@@ -1,0 +1,31 @@
+{
+  "name": "stardew-miniprogram",
+  "version": "1.0.0",
+  "description": "星露谷物语（Stardew Valley）实用查询小助手，数据主要参考 [星露谷中文维基](https://zh.stardewvalleywiki.com/)。",
+  "main": "app.js",
+  "scripts": {
+    "dev:open": "node scripts/devtools-cli.js open",
+    "dev:cache": "node scripts/devtools-cli.js cache compile",
+    "dev:preview": "node scripts/devtools-cli.js preview",
+    "dev:login": "node scripts/devtools-cli.js islogin",
+    "ci:info": "node scripts/ci.js info",
+    "ci:preview": "node scripts/ci.js preview",
+    "ci:upload": "node scripts/ci.js upload",
+    "preview": "node scripts/devtools-cli.js preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maybe-lin/stardew-miniprogram.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maybe-lin/stardew-miniprogram/issues"
+  },
+  "homepage": "https://github.com/maybe-lin/stardew-miniprogram#readme",
+  "devDependencies": {
+    "miniprogram-ci": "^2.1.31"
+  }
+}

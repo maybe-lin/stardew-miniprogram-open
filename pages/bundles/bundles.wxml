@@ -1,0 +1,100 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+
+  <view class="page-main">
+    <view class="summary card">
+      <view class="summary-title">🏛️ 社区中心收集包</view>
+      <view class="summary-sub">进度 {{doneCount}} / {{totalCount}} · 展开后勾选物品，点「获取」查怎么收集</view>
+    </view>
+
+    <scroll-view scroll-x class="filter-scroll" enable-flex>
+      <view class="filter-bar">
+        <view
+          class="filter-btn {{currentRoom === item ? 'active' : ''}}"
+          wx:for="{{rooms}}"
+          wx:key="*this"
+          data-room="{{item}}"
+          bindtap="onRoomFilter"
+        >{{item}}</view>
+      </view>
+    </scroll-view>
+
+    <view
+      class="bundle-card card {{item.done ? 'is-done' : ''}} {{item.open ? 'is-open' : ''}}"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+    >
+      <!-- 头部：展开 + 整包勾选 -->
+      <view class="bundle-head" data-id="{{item.id}}" bindtap="toggleExpand">
+        <view
+          class="checkbox {{item.done ? 'checked' : ''}}"
+          data-id="{{item.id}}"
+          catchtap="toggleBundle"
+        ></view>
+        <view class="bundle-main">
+          <view class="bundle-title-row">
+            <text class="bundle-name {{item.done ? 'done-text' : ''}}">{{item.name}}</text>
+            <text class="bundle-room">{{item.room}}</text>
+          </view>
+          <view class="bundle-meta">
+            <text class="bundle-progress">{{item.progressText}}</text>
+            <text class="bundle-pick">{{item.pickNote}}</text>
+          </view>
+          <view class="bundle-reward">
+            <image
+              wx:if="{{item.hasRewardIcon}}"
+              class="reward-icon"
+              src="{{item.rewardIcon}}"
+              mode="aspectFit"
+            />
+            <text class="reward-emoji" wx:else>{{item.rewardEmoji}}</text>
+            <text class="reward-text">{{item.reward}}</text>
+          </view>
+        </view>
+        <text class="bundle-arrow">{{item.open ? '▾' : '▸'}}</text>
+      </view>
+
+      <!-- 展开：物品明细可勾选 + 查看获取 -->
+      <view class="bundle-body" wx:if="{{item.open}}">
+        <view class="slot-hint">点左侧勾选已提交 · 点右侧「获取」查看怎么收集</view>
+        <view
+          class="slot-row {{slot.on ? 'on' : ''}}"
+          wx:for="{{item.slotRows}}"
+          wx:for-item="slot"
+          wx:key="index"
+        >
+          <view
+            class="slot-check {{slot.on ? 'checked' : ''}}"
+            data-id="{{item.id}}"
+            data-index="{{slot.index}}"
+            catchtap="toggleSlot"
+          ></view>
+          <view
+            class="slot-mid"
+            data-id="{{item.id}}"
+            data-index="{{slot.index}}"
+            bindtap="toggleSlot"
+          >
+            <text class="slot-name {{slot.on ? 'done-text' : ''}}">{{slot.name}}</text>
+          </view>
+          <view
+            class="slot-link"
+            wx:if="{{slot.canOpen}}"
+            data-item-id="{{slot.itemId}}"
+            data-name="{{slot.name}}"
+            catchtap="openItem"
+          >获取 ›</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="foot-tip" wx:if="{{!filteredList.length}}">该房间暂无收集包</view>
+  </view>
+</view>

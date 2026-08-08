@@ -1,0 +1,55 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="page-main">
+    <view class="hero-card card">
+      <view class="hero-icon">🪚</view>
+      <view class="hero-copy">
+        <view class="hero-title">罗宾木匠商店</view>
+        <view class="hero-desc">造价、材料、工期与解锁内容一次看清</view>
+      </view>
+      <view class="hero-count">{{count}} 项</view>
+    </view>
+
+    <view class="sticky-tools">
+      <view class="search-box">
+        <text class="search-icon">⌕</text>
+        <input class="search-input" value="{{keyword}}" placeholder="搜索建筑或材料，如 硬木" bindinput="onSearch" />
+        <text class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch">×</text>
+      </view>
+      <view class="group-row">
+        <view class="group-chip {{group === item.key ? 'on' : ''}}" wx:for="{{groups}}" wx:key="key" data-group="{{item.key}}" bindtap="setGroup">{{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="building-list">
+      <view class="building-card card" wx:for="{{list}}" wx:key="id">
+        <view class="building-top">
+          <view class="building-icon">
+            <image class="building-icon-img" src="{{item.icon}}" mode="aspectFit" />
+          </view>
+          <view class="building-main">
+            <view class="building-name">{{item.name}}</view>
+            <view class="building-desc">{{item.desc}}</view>
+          </view>
+          <view class="cost"><text class="coin">●</text>{{item.cost}}g</view>
+        </view>
+        <view class="facts">
+          <view class="fact full"><text class="fact-label">材料</text><text class="fact-value">{{item.materials}}</text></view>
+          <view class="fact"><text class="fact-label">工期</text><text class="fact-value">{{item.days ? item.days + ' 天' : '立即'}}</text></view>
+          <view class="fact"><text class="fact-label">容量</text><text class="fact-value">{{item.capacity}}</text></view>
+        </view>
+        <view class="unlock"><text class="unlock-label">可用内容</text>{{item.unlocks}}</view>
+      </view>
+      <view class="empty" wx:if="{{!list.length}}">没有匹配的建筑或材料</view>
+    </view>
+
+    <view class="source-note">数据按 1.6 版整理 · 升级建筑显示的是本级增量花费</view>
+  </view>
+</view>

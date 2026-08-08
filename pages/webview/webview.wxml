@@ -1,0 +1,12 @@
+<!-- 内嵌打开外部工具 / 维基页面 -->
+<web-view wx:if="{{url}}" src="{{url}}" bindmessage="onMessage" bindload="onLoadWeb" binderror="onError"></web-view>
+
+<!-- 加载失败时的兜底 -->
+<view wx:if="{{showFallback}}" class="fallback">
+  <view class="fallback-card">
+    <view class="fallback-title">{{title || '外部页面'}}</view>
+    <view class="fallback-desc">当前环境无法直接内嵌打开该网页（常见原因：未配置业务域名，或站点禁止嵌入）。</view>
+    <view class="fallback-url">{{url}}</view>
+    <view class="fallback-btn" bindtap="copyUrl">复制链接到浏览器打开</view>
+  </view>
+</view>

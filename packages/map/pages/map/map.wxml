@@ -1,0 +1,110 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="page-main">
+    <view class="tip card">
+      <view class="tip-main">
+        <view class="tip-mark">🗺️</view>
+        <view class="tip-copy">
+          <view class="tip-title">星露谷小镇地图</view>
+          <view class="tip-desc">区域示意 · 选择后自动放大定位（非游戏内精确坐标）</view>
+        </view>
+      </view>
+      <view class="map-actions">
+        <view class="map-action secondary" bindtap="resetMap">↺ 回到全图</view>
+        <view class="map-action primary" bindtap="openPreview">⌕ 查看大图</view>
+      </view>
+    </view>
+
+    <view class="picker-head">
+      <view class="picker-title">选择区域（示意图）</view>
+      <view class="picker-note">共 {{areaCount}} 个区域</view>
+    </view>
+    <view class="area-grid">
+        <view
+          wx:for="{{areas}}"
+          wx:key="id"
+          class="area-tab {{selectedAreaId === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="selectArea"
+        >
+          <text class="area-tab-icon">{{item.icon}}</text>
+          <text>{{item.name}}</text>
+        </view>
+    </view>
+
+    <view class="map-wrap" style="height: {{viewH}}px;">
+      <view class="map-location-badge">
+        <text>{{selectedArea.icon}}</text>
+        <text class="map-location-name">{{selectedArea.name}}</text>
+        <text class="map-location-scale">{{scaleLabel}}x</text>
+      </view>
+      <movable-area class="m-area" scale-area>
+        <movable-view
+          class="m-view"
+          style="width: {{viewW}}px; height: {{viewH}}px; margin-left: {{viewOffsetX}}px;"
+          direction="all"
+          scale
+          scale-min="{{1}}"
+          scale-max="{{4}}"
+          scale-value="{{scale}}"
+          x="{{x}}"
+          y="{{y}}"
+          inertia="{{false}}"
+          out-of-bounds="{{false}}"
+          animation="{{false}}"
+          bindscale="onScale"
+          bindchange="onMove"
+          bindtouchstart="onTouchStart"
+          bindtouchend="onTouchEnd"
+          bindtouchcancel="onTouchEnd"
+        >
+          <!-- scaleToFill：view 已按原图比例设好，避免 aspectFit 两侧绿边 -->
+          <image
+            class="map-img"
+            src="{{selectedArea.mapImage}}"
+            mode="scaleToFill"
+            lazy-load="{{false}}"
+            show-menu-by-longpress
+          />
+        </movable-view>
+      </movable-area>
+      <view class="gesture-hint">双指缩放 · 单指拖动</view>
+    </view>
+    <view class="map-disclaimer">地图为区域示意，标注与比例以游戏内为准；资料参考星露谷中文维基</view>
+
+    <view class="area-section">
+      <view class="section-head">
+        <view>
+          <view class="section-eyebrow">区域探索 · 示意</view>
+          <view class="section-title">{{selectedArea.icon}} {{selectedArea.name}}</view>
+          <view class="section-desc">{{selectedArea.subtitle}}</view>
+        </view>
+        <view class="area-count">攻略速查</view>
+      </view>
+
+      <view class="area-card card">
+        <view class="resident-box">
+          <view class="resident-label">👥 居民与范围</view>
+          <view class="resident-value">{{selectedArea.residents}}</view>
+        </view>
+
+        <view class="detail-label">📍 关键地点与条件</view>
+        <view class="point-list">
+          <view class="point-item" wx:for="{{selectedArea.points}}" wx:key="*this">
+            <view class="point-dot"></view>
+            <view class="point-text">{{item}}</view>
+          </view>
+        </view>
+      </view>
+
+
+    </view>
+  </view>
+</view>

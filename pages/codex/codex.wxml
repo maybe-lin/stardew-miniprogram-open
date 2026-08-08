@@ -1,0 +1,110 @@
+<view class="page {{darkMode ? 'dark' : ''}} season-{{uiSeason}}">
+  <image class="page-bg" src="/images/app-bg.jpg" mode="scaleToFill" />
+  <view class="season-deco">
+    <view class="flake f1"></view>
+    <view class="flake f2"></view>
+    <view class="flake f3"></view>
+    <view class="flake f4"></view>
+    <view class="flake f5"></view>
+  </view>
+  <view class="page-main">
+    <view class="header-pad">
+      <view class="section-label">图鉴分类 · 秒查核心元素</view>
+      <view class="cat-grid">
+        <view
+          class="cat-card {{category === item.key ? 'on' : ''}}"
+          wx:for="{{statsList}}"
+          wx:key="key"
+          data-cat="{{item.key}}"
+          bindtap="selectCat"
+        >
+          <view class="cat-card-inner">
+            <view class="cat-icon-wrap">
+              <image wx:if="{{item.icon}}" class="cat-icon" src="{{item.icon}}" mode="aspectFit" />
+              <view wx:else class="cat-emoji">{{item.emoji}}</view>
+            </view>
+            <view class="cat-name">{{item.name}}</view>
+            <view class="cat-prog">{{item.total}}项</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 分类快筛：包一层 filters 行，避免 enable-flex 把 chip 纵向撑空 -->
+      <scroll-view scroll-x class="filter-scroll" enable-flex wx:if="{{quickChips.length}}">
+        <view class="filters">
+          <view
+            class="f-chip {{quickKey === q.key ? 'on' : ''}}"
+            wx:for="{{quickChips}}"
+            wx:for-item="q"
+            wx:key="key"
+            data-key="{{q.key}}"
+            bindtap="onQuickChip"
+          >{{q.label}}</view>
+        </view>
+      </scroll-view>
+
+      <scroll-view scroll-x class="filter-scroll" enable-flex>
+        <view class="filters">
+          <view class="f-chip {{sort === 'name' ? 'on' : ''}}" data-sort="name" bindtap="setSort">名称</view>
+          <view class="f-chip {{sort === 'price_desc' ? 'on' : ''}}" data-sort="price_desc" bindtap="setSort">售价↓</view>
+          <view class="f-chip {{sort === 'difficulty' ? 'on' : ''}}" data-sort="difficulty" bindtap="setSort">难度</view>
+          <view class="f-chip {{sort === 'must_first' ? 'on' : ''}}" data-sort="must_first" bindtap="setSort" wx:if="{{category === 'cooking'}}">推荐优先</view>
+          <view class="f-chip {{onlyMustCook ? 'on' : ''}}" bindtap="toggleMustCook" wx:if="{{category === 'cooking'}}">只看推荐</view>
+          <view class="f-chip {{onlyFav ? 'on' : ''}}" bindtap="toggleFavFilter">⭐ 收藏</view>
+          <view class="f-chip {{onlyUncollected ? 'on' : ''}}" bindtap="toggleUncollected">未收集</view>
+        </view>
+      </scroll-view>
+      <view class="cook-hint" wx:if="{{category === 'cooking'}}">
+        推荐 {{mustCount}} / 全部 {{list.length}} 道 · 收藏可离线查看
+      </view>
+      <view class="cook-hint" wx:elif="{{onlyFav}}">
+        仅显示已收藏 · 长按条目可加收藏
+      </view>
+    </view>
+
+    <view class="list-wrap">
+      <view
+        class="item-row"
+        wx:for="{{list}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="goItem"
+        bindlongpress="onLongPress"
+      >
+        <view class="item-icon {{item.collected ? '' : 'dim'}}">
+          <image wx:if="{{item.hasIcon}}" class="item-icon-img" src="{{item.icon}}" mode="aspectFit" />
+          <text wx:else>{{item.emoji}}</text>
+        </view>
+        <view class="item-body">
+          <view class="item-name">
+            {{item.name}}
+            <text class="badge-must" wx:if="{{item.isMustCook}}">推荐</text>
+            <text class="star" wx:if="{{item.favorited}}">⭐</text>
+          </view>
+          <view class="tags">
+            <text
+              class="tag tag-season tag-{{s}}"
+              wx:for="{{item.seasons}}"
+              wx:for-item="s"
+              wx:key="*this"
+            >{{s === 'spring' ? '春' : s === 'summer' ? '夏' : s === 'fall' ? '秋' : '冬'}}</text>
+            <text class="tag tag-muted">{{item.categoryName}}</text>
+            <text class="tag tag-muted" wx:if="{{item.difficulty}}">难{{item.difficulty}}</text>
+          </view>
+          <view class="item-meta">{{item.sources[0] ? item.sources[0].detail : (item.desc || '')}}</view>
+        </view>
+        <view class="right-col">
+          <view class="item-price" wx:if="{{item.basePrice}}">{{item.basePrice}}g</view>
+          <view class="item-price book-label" wx:elif="{{item.category === 'book'}}">阅读</view>
+          <view class="icon-btns">
+            <view class="check" data-id="{{item.id}}" catchtap="toggleFav">{{item.favorited ? '⭐' : '☆'}}</view>
+            <view class="check" data-id="{{item.id}}" catchtap="toggleCollect">{{item.collected ? '✅' : '⬜'}}</view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{!list.length}}" class="empty">{{onlyFav ? '还没有收藏，长按条目可添加' : '这个分类还没有物品'}}</view>
+      <view class="wiki-foot-inline">数据参考星露谷中文维基 · 仅供学习 · 非官方 · 请勿商用</view>
+    </view>
+  </view>
+</view>

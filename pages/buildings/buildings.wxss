@@ -1,0 +1,271 @@
+.page-main {
+  padding: 22rpx 24rpx 60rpx;
+}
+
+.hero-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+  background: linear-gradient(135deg, rgba(255, 248, 231, 0.98), rgba(242, 222, 183, 0.96));
+}
+
+.hero-icon {
+  width: 82rpx;
+  height: 82rpx;
+  margin-right: 18rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 42rpx;
+  flex-shrink: 0;
+}
+
+.hero-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-title {
+  color: var(--text);
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.hero-desc {
+  margin-top: 6rpx;
+  color: var(--text-sub);
+  font-size: 21rpx;
+}
+
+.hero-count {
+  margin-left: 12rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  color: var(--primary-dark);
+  background: rgba(232, 145, 58, 0.15);
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.sticky-tools {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 -24rpx 16rpx;
+  padding: 10rpx 24rpx 14rpx;
+  background: var(--bg, #F5E0C0);
+  box-shadow: none;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.search-box {
+  height: 72rpx;
+  padding: 0 20rpx;
+  display: flex;
+  align-items: center;
+  border-radius: 18rpx;
+  border: 2rpx solid var(--border);
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+.search-icon {
+  margin-right: 10rpx;
+  color: var(--primary-dark);
+  font-size: 30rpx;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  height: 68rpx;
+  color: var(--text);
+  font-size: 25rpx;
+}
+
+.search-clear {
+  padding: 10rpx;
+  color: var(--text-muted);
+  font-size: 28rpx;
+}
+
+.group-row {
+  display: flex;
+  margin: 12rpx -5rpx 0;
+}
+
+.group-chip {
+  flex: 1;
+  min-width: 0;
+  margin: 0 5rpx;
+  padding: 11rpx 3rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--border);
+  color: var(--text-sub);
+  background: var(--bg-card);
+  text-align: center;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.group-chip.on {
+  color: #fff;
+  border-color: var(--primary-dark);
+  background: var(--primary);
+}
+
+.building-card {
+  padding: 22rpx;
+}
+
+.building-top {
+  display: flex;
+  align-items: center;
+}
+
+.building-icon {
+  width: 106rpx;
+  height: 94rpx;
+  margin-right: 15rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-soft);
+  flex-shrink: 0;
+}
+
+.building-icon-img {
+  width: 96rpx;
+  height: 86rpx;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.building-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.building-name {
+  color: var(--text);
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.building-desc {
+  margin-top: 3rpx;
+  color: var(--text-muted);
+  font-size: 20rpx;
+  line-height: 1.4;
+}
+
+.cost {
+  margin-left: 12rpx;
+  color: #b66b15;
+  font-size: 25rpx;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.coin {
+  margin-right: 5rpx;
+  color: #f2b632;
+  font-size: 18rpx;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 18rpx -5rpx 0;
+}
+
+.fact {
+  width: 50%;
+  padding: 5rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.fact.full {
+  width: 100%;
+}
+
+.fact-label {
+  color: var(--text-muted);
+  font-size: 18rpx;
+}
+
+.fact-value {
+  margin-top: 3rpx;
+  color: var(--text-sub);
+  font-size: 23rpx;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.unlock {
+  margin-top: 14rpx;
+  padding: 12rpx 15rpx;
+  border-radius: 12rpx;
+  color: #4d724d;
+  background: rgba(92, 184, 92, 0.12);
+  font-size: 21rpx;
+  line-height: 1.5;
+}
+
+.unlock-label {
+  margin-right: 10rpx;
+  font-weight: 800;
+}
+
+.source-note {
+  padding: 12rpx 10rpx 30rpx;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 19rpx;
+}
+
+.page.dark .hero-card {
+  background: linear-gradient(135deg, rgba(58, 46, 40, 0.98), rgba(70, 54, 39, 0.96));
+}
+
+.page.dark .sticky-tools {
+  background: var(--bg, #1a1520);
+}
+
+.page.dark .unlock {
+  color: #a8d1a8;
+}
+
+@media (max-width: 350px) {
+  .page-main {
+    padding-left: 16rpx;
+    padding-right: 16rpx;
+  }
+
+  .sticky-tools {
+    margin-left: -16rpx;
+    margin-right: -16rpx;
+    padding-left: 16rpx;
+    padding-right: 16rpx;
+  }
+
+  .hero-count {
+    display: none;
+  }
+
+  .group-chip {
+    font-size: 19rpx;
+  }
+
+  .building-top {
+    align-items: flex-start;
+  }
+
+  .cost {
+    font-size: 22rpx;
+  }
+}

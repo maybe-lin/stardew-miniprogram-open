@@ -1,0 +1,5 @@
+<view class="legacy-redirect">
+  <view class="redirect-icon">🌱</view>
+  <view class="redirect-title">正在进入新版首页</view>
+  <view class="redirect-sub">旧分享链接已自动兼容</view>
+</view>
